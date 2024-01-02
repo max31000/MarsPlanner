@@ -18,7 +18,7 @@ namespace Systems
             {
                 var cubeComponent = cubePool.Get(element);
                 var deltaTime = Time.deltaTime;
-                
+
                 cubeComponent.Cube.transform.Rotate(0, 100 * deltaTime, 0);
             }
         }

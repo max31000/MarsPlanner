@@ -10,7 +10,7 @@ namespace Definitions
         public float rotateSpeed;
         public float maxHeigth;
         public float minHeigth;
-        public float verticalMoveSpeed;
+        public float cameraConvergenceWithTargetValueSpeed;
         public Camera mainCameraPrefab;
         
         public int minX; 

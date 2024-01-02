@@ -18,11 +18,11 @@ namespace Systems
             foreach (var cameraId in cameraComponentsFilter.Value)
             {
                 ref var cameraComponent = ref cameraComponentsPool.Value.Get(cameraId);
-                UpdateCamera(cameraComponent);
+                UpdateCamera(ref cameraComponent);
             }
         }
 
-        private void UpdateCamera(CameraComponent cameraComponent)
+        private void UpdateCamera(ref CameraComponent cameraComponent)
         {
             var leftRightDirection = 0f;
             var aheadBackDirection = 0f;
@@ -44,8 +44,8 @@ namespace Systems
             verticalDirection += -Input.mouseScrollDelta.y;
 
             CalculateAndMoveCamera(rotateDirection, leftRightDirection, aheadBackDirection, verticalDirection,
-                cameraComponent);
-            CorrectCamera(cameraComponent);
+                ref cameraComponent);
+            CorrectCamera(ref cameraComponent);
         }
 
         private int CalculateDirection(KeyCode positiveKey, KeyCode negativeKey, KeyCode inputKey)
@@ -61,30 +61,24 @@ namespace Systems
         }
 
         private void CalculateAndMoveCamera(float rotateDirection, float leftRightDirection, float aheadBackDirection,
-            float verticalDirection, CameraComponent cameraComponent)
+            float verticalDirection, ref CameraComponent cameraComponent)
         {
             var movement = new Vector3(leftRightDirection, 0, aheadBackDirection) * cameraComponent.speed;
             movement = Vector3.ClampMagnitude(movement, cameraComponent.speed) * Time.deltaTime;
-            var verticalDelta = verticalDirection * cameraComponent.verticalMoveStepFactor * Time.deltaTime;
+            var verticalDelta = verticalDirection * cameraComponent.verticalMoveStepFactor;
 
-            if (Math.Abs(verticalDelta) > cameraComponent.verticalMoveSpeed)
-            {
-                movement.y = Math.Sign(verticalDelta) * cameraComponent.verticalMoveSpeed;
-                if (Math.Abs(cameraComponent.distanceToTargetCameraHeigth) <
-                    cameraComponent.verticalMoveSpeed * CameraComponent.InertionCameraMultiplier)
-                    cameraComponent.distanceToTargetCameraHeigth += verticalDelta - cameraComponent.verticalMoveSpeed;
-            }
-            else
-            {
-                movement.y = verticalDelta;
-            }
+            if (Math.Abs(verticalDelta) != 0)
+                if (Math.Abs(cameraComponent.distanceToTargetCameraHeigth + verticalDelta) <
+                    CameraComponent.InertionCameraMultiplier)
+                    cameraComponent.distanceToTargetCameraHeigth += verticalDelta;
 
-            if (Math.Abs(cameraComponent.distanceToTargetCameraHeigth) > cameraComponent.verticalMoveSpeed * 2)
+            var verticalShift = cameraComponent.distanceToTargetCameraHeigth *
+                                cameraComponent.cameraConvergenceWithTargetValueSpeed * Time.deltaTime;
+
+            if (Math.Abs(cameraComponent.distanceToTargetCameraHeigth) > 0.5f)
             {
-                movement.y = Math.Sign(cameraComponent.distanceToTargetCameraHeigth) *
-                             cameraComponent.verticalMoveSpeed;
-                cameraComponent.distanceToTargetCameraHeigth -=
-                    Math.Sign(cameraComponent.distanceToTargetCameraHeigth) * cameraComponent.verticalMoveSpeed;
+                movement.y = verticalShift;
+                cameraComponent.distanceToTargetCameraHeigth -= verticalShift;
             }
 
             if (movement.y > 0 && cameraComponent.Camera.transform.position.y > cameraComponent.maxHeigth)
@@ -113,7 +107,7 @@ namespace Systems
                 (cameraComponent.maxHeigth - cameraComponent.minHeigth));
         }
 
-        private void CorrectCamera(CameraComponent cameraComponent)
+        private void CorrectCamera(ref CameraComponent cameraComponent)
         {
             var cameraTransform = cameraComponent.Camera.transform;
             var camX = cameraTransform.position.x;

@@ -1,15 +1,15 @@
 using Definitions;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
+using Leopotam.EcsLite.UnityEditor;
 using Systems;
 using UnityEngine;
 
 public class EcsEntryPoint : MonoBehaviour
 {
+    public GameDefinitions gameDefinitions;
     private IEcsSystems _systems;
     private EcsWorld _world;
-    
-    public GameDefinitions gameDefinitions;
 
     private void Start()
     {
@@ -26,9 +26,9 @@ public class EcsEntryPoint : MonoBehaviour
 #if UNITY_EDITOR
             // Регистрируем отладочные системы по контролю за состоянием каждого отдельного мира:
             // .Add (new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem ("events"))
-            .Add (new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem ())
+            .Add(new EcsWorldDebugSystem())
             // Регистрируем отладочные системы по контролю за текущей группой систем. 
-            .Add (new Leopotam.EcsLite.UnityEditor.EcsSystemsDebugSystem ())
+            .Add(new EcsSystemsDebugSystem())
 #endif
             .Inject()
             .Init();
