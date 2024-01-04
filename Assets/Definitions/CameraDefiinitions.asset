@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: CameraDefiinitions
   m_EditorClassIdentifier: 
   speed: 15
-  verticalMoveStepFactor: 150
+  verticalMoveStepFactor: 4
   rotateSpeed: 0.3
-  maxHeigth: 55
+  maxHeigth: 30
   minHeigth: 2
-  verticalMoveSpeed: 1
+  cameraConvergenceWithTargetValueSpeed: 6
   mainCameraPrefab: {fileID: 765129345411939375, guid: 01265972b70a26744be29c39516696ae, type: 3}
   minX: -300
   maxX: 300

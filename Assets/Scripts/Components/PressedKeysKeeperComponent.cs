@@ -5,6 +5,7 @@ namespace Components
 {
     public struct PressedKeysKeeperComponent
     {
-        public Dictionary<KeyCode, int> pressedKeyCodeEvents;
+        public Dictionary<KeyCode, int> PressedKeyCodeEvents;
+        
     }
 }

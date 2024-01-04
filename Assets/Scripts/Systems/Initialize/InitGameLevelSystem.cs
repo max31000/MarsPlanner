@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Systems
 {
-    public class InitWorldSystem : IEcsInitSystem
+    public class InitGameLevelSystem : IEcsInitSystem
     {
         private readonly EcsPoolInject<CameraComponent> cameraPool = null;
         private readonly EcsPoolInject<CubeComponent> cubePool = null;

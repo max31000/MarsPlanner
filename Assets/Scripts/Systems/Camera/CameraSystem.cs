@@ -10,8 +10,8 @@ namespace Systems
     {
         private readonly EcsFilterInject<Inc<CameraComponent>> cameraComponentsFilter = null;
         private readonly EcsPoolInject<CameraComponent> cameraComponentsPool = null;
-        private readonly EcsFilterInject<Inc<PressKeyEvent>> pressedKeyEventsFilter = null;
-        private readonly EcsPoolInject<PressKeyEvent> pressedKeyEventsPool = null;
+        private readonly EcsFilterInject<Inc<InputKeyPressedEvent>> pressedKeyEventsFilter = null;
+        private readonly EcsPoolInject<InputKeyPressedEvent> pressedKeyEventsPool = null;
 
         public void Run(IEcsSystems systems)
         {

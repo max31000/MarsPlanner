@@ -16,5 +16,16 @@ namespace Helpers
             enumerator.MoveNext();
             return enumerator.Current;
         }
+
+        public static bool Contains(this EcsFilter filter, int entity)
+        {
+            foreach (var filterEntity in filter)
+            {
+                if (filterEntity == entity)
+                    return true;
+            }
+
+            return false;
+        }
     }
 }

@@ -10,8 +10,8 @@ namespace Systems
     {
         private readonly EcsPoolInject<PressedKeysKeeperComponent> keyKeeperPool = null;
         private readonly EcsFilterInject<Inc<PressedKeysKeeperComponent>> keysKeeperFilter = null;
-        private readonly EcsFilterInject<Inc<PressKeyEvent>> pressKeyEventFilter = null;
-        private readonly EcsPoolInject<PressKeyEvent> pressKeyEventsPool = null;
+        private readonly EcsFilterInject<Inc<InputKeyPressedEvent>> pressKeyEventFilter = null;
+        private readonly EcsPoolInject<InputKeyPressedEvent> pressKeyEventsPool = null;
         private readonly EcsFilterInject<Inc<PreviousWindowFocusStateComponent>> windowStateFilter = null;
         private readonly EcsPoolInject<PreviousWindowFocusStateComponent> windowStatePool = null;
 
@@ -42,7 +42,7 @@ namespace Systems
             foreach (var keysKeeper in keysKeeperFilter.Value)
             {
                 ref var keysKeeperComponent = ref keyKeeperPool.Value.Get(keysKeeper);
-                keysKeeperComponent.pressedKeyCodeEvents.Clear();
+                keysKeeperComponent.PressedKeyCodeEvents.Clear();
             }
 
             foreach (var pressedKeyEvents in pressKeyEventFilter.Value)

@@ -1,34 +1,31 @@
 using Definitions;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
-using Leopotam.EcsLite.UnityEditor;
 using Systems;
 using UnityEngine;
 
 public class EcsEntryPoint : MonoBehaviour
 {
     public GameDefinitions gameDefinitions;
-    private IEcsSystems _systems;
-    private EcsWorld _world;
+    private IEcsSystems systems;
+    private EcsWorld world;
 
     private void Start()
     {
-        // Создаем окружение, подключаем системы.
-        _world = new EcsWorld();
-        _systems = new EcsSystems(_world);
-        _systems
-            .Add(new InitWorldSystem())
+        world = new EcsWorld();
+        systems = new EcsSystems(world);
+        systems
+            .Add(new InitGameLevelSystem())
             .Add(new CubeRoundSystem())
             .Add(new InputSystem())
             .Add(new CameraSystem())
             .Add(new CleanKeysWhenWindowUnfocusSystem())
+            .Add(new RaycastObjectSystem())
             .Inject(gameDefinitions)
 #if UNITY_EDITOR
-            // Регистрируем отладочные системы по контролю за состоянием каждого отдельного мира:
-            // .Add (new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem ("events"))
-            .Add(new EcsWorldDebugSystem())
-            // Регистрируем отладочные системы по контролю за текущей группой систем. 
-            .Add(new EcsSystemsDebugSystem())
+            // не выносить префикс неймспейса в юзинг, поломается релизный билд
+            .Add(new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem())
+            .Add(new Leopotam.EcsLite.UnityEditor.EcsSystemsDebugSystem())
 #endif
             .Inject()
             .Init();
@@ -36,24 +33,21 @@ public class EcsEntryPoint : MonoBehaviour
 
     private void Update()
     {
-        // Выполняем все подключенные системы.
-        _systems?.Run();
+        systems?.Run();
     }
 
     private void OnDestroy()
     {
-        // Уничтожаем подключенные системы.
-        if (_systems != null)
+        if (systems != null)
         {
-            _systems.Destroy();
-            _systems = null;
+            systems.Destroy();
+            systems = null;
         }
 
-        // Очищаем окружение.
-        if (_world != null)
+        if (world != null)
         {
-            _world.Destroy();
-            _world = null;
+            world.Destroy();
+            world = null;
         }
     }
 }
