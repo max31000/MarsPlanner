@@ -9,8 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e0bb7c2adca4b38bdde704e1476121a, type: 3}
-  m_Name: GameDefinitions
+  m_Script: {fileID: 11500000, guid: 451ca658e1064c31bdf062f29602e7d5, type: 3}
+  m_Name: KeysDefinitions
   m_EditorClassIdentifier: 
-  CameraDefinitions: {fileID: 11400000, guid: 773697626daefdb40846c635370d9e84, type: 2}
-  KeysDefinitions: {fileID: 11400000, guid: b9fd9daa148bad34ea8b672b74c85423, type: 2}
+  KeysWithRaycastObserving: 43010000

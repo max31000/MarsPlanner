@@ -6,5 +6,7 @@ namespace Definitions
     public class GameDefinitions : ScriptableObject
     {
         public CameraDefinition CameraDefinitions;
+
+        public KeysDefinitions KeysDefinitions;
     }
 }

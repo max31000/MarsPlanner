@@ -1,4 +1,6 @@
-﻿using Components;
+﻿using System.Linq;
+using Components;
+using Definitions;
 using Helpers;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
@@ -15,6 +17,8 @@ namespace Systems
         private readonly EcsPoolInject<RaycastObjectEvent> castObjectPool = null;
         private readonly EcsPoolInject<InputKeyPressedEvent> keyInputPool = null;
         private readonly EcsFilterInject<Inc<InputKeyPressedEvent, InputKeyUpEvent>> keyUpInputFilter = null;
+        
+        private readonly EcsCustomInject<GameDefinitions> definitions = default;
 
         private readonly EcsWorldInject world = null;
 
@@ -30,7 +34,7 @@ namespace Systems
         public void PostRun(IEcsSystems systems)
         {
             RemoveOldEvents();
-            HandleMouseUp();
+            HandleKeysUp();
         }
 
         private void RemoveOldEvents()
@@ -38,19 +42,19 @@ namespace Systems
             castObjectPool.Value.Del(castObjectFilter.Value.Single());
         }
 
-        private void HandleMouseUp()
+        private void HandleKeysUp()
         {
             if (keyUpInputFilter.Value.GetEntitiesCount() == 0) return;
 
             foreach (var keyUpEntity in keyUpInputFilter.Value)
             {
                 ref var keyComponent = ref keyInputPool.Value.Get(keyUpEntity);
-                if (keyComponent.Code == KeyCode.Mouse0)
-                    HandleRaycast();
+                if (definitions.Value.KeysDefinitions.KeysWithRaycastObserving.Contains(keyComponent.Code))
+                    HandleRaycast(keyComponent.Code);
             }
         }
 
-        private void HandleRaycast()
+        private void HandleRaycast(KeyCode sourceKeyCode)
         {
             var cameraEntity = cameraComponentsFilter.Value.Single();
             ref var cameraComponent = ref cameraComponentsPool.Value.Get(cameraEntity);
@@ -62,6 +66,7 @@ namespace Systems
             ref var castObjectComponent = ref castObjectPool.Value.Add(castObjectFilter.Value.Single());
             castObjectComponent.GameObject = hit.collider.gameObject;
             castObjectComponent.GameObjectName = castObjectComponent.GameObject.name;
+            castObjectComponent.RaySourceKeyCode = sourceKeyCode;
         }
     }
 }

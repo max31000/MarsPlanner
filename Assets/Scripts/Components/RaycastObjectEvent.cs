@@ -6,5 +6,6 @@ namespace Components
     {
         public string GameObjectName;
         public GameObject GameObject;
+        public KeyCode RaySourceKeyCode;
     }
 }

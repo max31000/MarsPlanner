@@ -2,6 +2,7 @@ using Definitions;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 using Systems;
+using Systems.Ui.Initialize;
 using UnityEngine;
 
 public class EcsEntryPoint : MonoBehaviour
@@ -21,6 +22,7 @@ public class EcsEntryPoint : MonoBehaviour
             .Add(new CameraSystem())
             .Add(new CleanKeysWhenWindowUnfocusSystem())
             .Add(new RaycastObjectSystem())
+            .Add(new InGameUiInitializeSystem())
             .Inject(gameDefinitions)
 #if UNITY_EDITOR
             // не выносить префикс неймспейса в юзинг, поломается релизный билд
