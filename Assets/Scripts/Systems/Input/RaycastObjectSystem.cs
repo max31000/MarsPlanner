@@ -10,8 +10,9 @@ namespace Systems
     {
         private readonly EcsFilterInject<Inc<CameraComponent>> cameraComponentsFilter = null;
         private readonly EcsPoolInject<CameraComponent> cameraComponentsPool = null;
-        private readonly EcsFilterInject<Inc<CastObjectComponent>> castObjectFilter = null;
-        private readonly EcsPoolInject<CastObjectComponent> castObjectPool = null;
+        private readonly EcsPoolInject<RaycastObjectEntityComponent> castObjectEntityPool = null;
+        private readonly EcsFilterInject<Inc<RaycastObjectEntityComponent>> castObjectFilter = null;
+        private readonly EcsPoolInject<RaycastObjectEvent> castObjectPool = null;
         private readonly EcsPoolInject<InputKeyPressedEvent> keyInputPool = null;
         private readonly EcsFilterInject<Inc<InputKeyPressedEvent, InputKeyUpEvent>> keyUpInputFilter = null;
 
@@ -19,21 +20,32 @@ namespace Systems
 
         public void Init(IEcsSystems systems)
         {
-            if (castObjectFilter.Value.GetEntitiesCount() != 0) 
+            if (castObjectFilter.Value.GetEntitiesCount() != 0)
                 return;
 
             var raycastEntity = world.Value.NewEntity();
-            castObjectPool.Value.Add(raycastEntity);
+            castObjectEntityPool.Value.Add(raycastEntity);
         }
 
         public void PostRun(IEcsSystems systems)
+        {
+            RemoveOldEvents();
+            HandleMouseUp();
+        }
+
+        private void RemoveOldEvents()
+        {
+            castObjectPool.Value.Del(castObjectFilter.Value.Single());
+        }
+
+        private void HandleMouseUp()
         {
             if (keyUpInputFilter.Value.GetEntitiesCount() == 0) return;
 
             foreach (var keyUpEntity in keyUpInputFilter.Value)
             {
                 ref var keyComponent = ref keyInputPool.Value.Get(keyUpEntity);
-                if (keyComponent.Code == KeyCode.Mouse0) 
+                if (keyComponent.Code == KeyCode.Mouse0)
                     HandleRaycast();
             }
         }
@@ -44,18 +56,12 @@ namespace Systems
             ref var cameraComponent = ref cameraComponentsPool.Value.Get(cameraEntity);
             var ray = cameraComponent.Camera.ScreenPointToRay(Input.mousePosition);
 
-            if (Physics.Raycast(ray, out var hit, 300))
-            {
-                ref var castObjectComponent = ref castObjectPool.Value.Get(castObjectFilter.Value.Single());
-                castObjectComponent.GameObject = hit.collider.gameObject;
-                castObjectComponent.GameObjectName = castObjectComponent.GameObject.name;
-            }
-            else
-            {
-                ref var castObjectComponent = ref castObjectPool.Value.Get(castObjectFilter.Value.Single());
-                castObjectComponent.GameObject = null;
-                castObjectComponent.GameObjectName = null;
-            }
+            if (!Physics.Raycast(ray, out var hit, 300))
+                return;
+
+            ref var castObjectComponent = ref castObjectPool.Value.Add(castObjectFilter.Value.Single());
+            castObjectComponent.GameObject = hit.collider.gameObject;
+            castObjectComponent.GameObjectName = castObjectComponent.GameObject.name;
         }
     }
 }

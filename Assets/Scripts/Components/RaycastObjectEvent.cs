@@ -2,7 +2,7 @@
 
 namespace Components
 {
-    public struct CastObjectComponent
+    public struct RaycastObjectEvent
     {
         public string GameObjectName;
         public GameObject GameObject;

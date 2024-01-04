@@ -16,7 +16,7 @@ public class EcsEntryPoint : MonoBehaviour
         systems = new EcsSystems(world);
         systems
             .Add(new InitGameLevelSystem())
-            .Add(new CubeRoundSystem())
+            .Add(new CubeSystem())
             .Add(new InputSystem())
             .Add(new CameraSystem())
             .Add(new CleanKeysWhenWindowUnfocusSystem())
