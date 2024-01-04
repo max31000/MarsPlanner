@@ -24,6 +24,7 @@ namespace Systems
                 if (rayCastEventComponent.GameObjectName == "Cube(Clone)")
                     cubeRotationDirection *= -1;
             }
+
             foreach (var element in cubeFilter.Value)
             {
                 ref var cubeComponent = ref cubePool.Value.Get(element);
