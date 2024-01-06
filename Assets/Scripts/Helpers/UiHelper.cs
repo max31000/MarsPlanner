@@ -22,12 +22,18 @@ namespace Helpers
                 var buttonEntity = world.NewEntity();
                 ref var buttonComponent = ref world.GetPool<ButtonComponent>().Add(buttonEntity);
                 buttonComponent.ButtonName = button.name;
-                buttonComponent.Bounds = button.GetButtonBounds();
                 buttonComponent.Button = button;
-                //buttonComponent.Button.onClick.AddListener(() => OnClick(buttonEntity));
+
+                buttonComponent.Button.onClick.RemoveAllListeners();
+                buttonComponent.Button.onClick.AddListener(() => OnClick(buttonEntity, world));
             }
 
             return newCanvas;
+        }
+
+        private static void OnClick(int btnEvent, EcsWorld world)
+        {
+            world.GetPool<ButtonOnClickEvent>().Add(btnEvent);
         }
     }
 }

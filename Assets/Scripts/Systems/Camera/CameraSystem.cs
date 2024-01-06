@@ -1,10 +1,11 @@
 ﻿using System;
 using Components;
+using Components.Input;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 using UnityEngine;
 
-namespace Systems
+namespace Systems.Camera
 {
     internal class CameraSystem : IEcsRunSystem
     {
@@ -41,7 +42,7 @@ namespace Systems
                 rotateDirection += CalculateDirection(KeyCode.E, KeyCode.Q, key);
             }
 
-            verticalDirection += -Input.mouseScrollDelta.y;
+            verticalDirection += -UnityEngine.Input.mouseScrollDelta.y;
 
             CalculateAndMoveCamera(rotateDirection, leftRightDirection, aheadBackDirection, verticalDirection,
                 ref cameraComponent);
@@ -87,12 +88,14 @@ namespace Systems
             if (movement.y < 0 && cameraComponent.Camera.transform.position.y < cameraComponent.minHeigth)
                 movement.y = 0;
 
-            MoveCamera(rotateDirection, movement, cameraComponent);
+            var rotateDelta = rotateDirection * cameraComponent.rotateSpeed * Time.deltaTime;
+
+            MoveCamera(rotateDelta, movement, cameraComponent);
         }
 
-        private void MoveCamera(float rotateDirection, Vector3 movement, CameraComponent cameraComponent)
+        private void MoveCamera(float rotateDelta, Vector3 movement, CameraComponent cameraComponent)
         {
-            cameraComponent.Camera.transform.Rotate(Vector3.up * rotateDirection * cameraComponent.rotateSpeed,
+            cameraComponent.Camera.transform.Rotate(Vector3.up * rotateDelta,
                 Space.World);
 
             var angle = cameraComponent.Camera.transform.rotation;

@@ -1,12 +1,14 @@
 ﻿using System.Linq;
 using Components;
+using Components.Input;
 using Definitions;
 using Helpers;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-namespace Systems
+namespace Systems.Input
 {
     public class RaycastObjectSystem : IEcsPostRunSystem, IEcsInitSystem
     {
@@ -15,10 +17,10 @@ namespace Systems
         private readonly EcsPoolInject<RaycastObjectEntityComponent> castObjectEntityPool = null;
         private readonly EcsFilterInject<Inc<RaycastObjectEntityComponent>> castObjectFilter = null;
         private readonly EcsPoolInject<RaycastObjectEvent> castObjectPool = null;
+
+        private readonly EcsCustomInject<GameDefinitions> definitions = default;
         private readonly EcsPoolInject<InputKeyPressedEvent> keyInputPool = null;
         private readonly EcsFilterInject<Inc<InputKeyPressedEvent, InputKeyUpEvent>> keyUpInputFilter = null;
-        
-        private readonly EcsCustomInject<GameDefinitions> definitions = default;
 
         private readonly EcsWorldInject world = null;
 
@@ -58,9 +60,9 @@ namespace Systems
         {
             var cameraEntity = cameraComponentsFilter.Value.Single();
             ref var cameraComponent = ref cameraComponentsPool.Value.Get(cameraEntity);
-            var ray = cameraComponent.Camera.ScreenPointToRay(Input.mousePosition);
+            var ray = cameraComponent.Camera.ScreenPointToRay(UnityEngine.Input.mousePosition);
 
-            if (!Physics.Raycast(ray, out var hit, 300))
+            if (EventSystem.current.IsPointerOverGameObject() || !Physics.Raycast(ray, out var hit, 600))
                 return;
 
             ref var castObjectComponent = ref castObjectPool.Value.Add(castObjectFilter.Value.Single());

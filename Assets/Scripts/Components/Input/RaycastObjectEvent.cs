@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Components
+namespace Components.Input
 {
     public struct RaycastObjectEvent
     {

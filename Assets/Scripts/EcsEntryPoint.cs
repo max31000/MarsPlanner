@@ -2,6 +2,11 @@ using Definitions;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 using Systems;
+using Systems.Buildings;
+using Systems.Camera;
+using Systems.Initialize;
+using Systems.Input;
+using Systems.Ui;
 using Systems.Ui.Initialize;
 using UnityEngine;
 
@@ -22,7 +27,11 @@ public class EcsEntryPoint : MonoBehaviour
             .Add(new CameraSystem())
             .Add(new CleanKeysWhenWindowUnfocusSystem())
             .Add(new RaycastObjectSystem())
+            .Add(new RaycastCoordinatesDetectSystem())
             .Add(new InGameUiInitializeSystem())
+            .Add(new ButtonEventProcessSystem())
+            .Add(new OpenBuildPanelSystem())
+            .Add(new StartBuildingSystem())
             .Inject(gameDefinitions)
 #if UNITY_EDITOR
             // не выносить префикс неймспейса в юзинг, поломается релизный билд

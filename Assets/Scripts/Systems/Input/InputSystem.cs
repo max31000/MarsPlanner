@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
 using Components;
+using Components.Input;
 using Helpers;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
-using Models.Input;
 using UnityEngine;
 
-namespace Systems
+namespace Systems.Input
 {
     internal class InputSystem : IEcsRunSystem, IEcsPostRunSystem
     {
@@ -53,7 +53,7 @@ namespace Systems
 
         private void HandleKeyBetweenDownAndUp(ref PressedKeysKeeperComponent keysKeeper, KeyCode key)
         {
-            if (Input.GetKey(key) && !Input.GetKeyUp(key) && !Input.GetKeyDown(key)
+            if (UnityEngine.Input.GetKey(key) && !UnityEngine.Input.GetKeyUp(key) && !UnityEngine.Input.GetKeyDown(key)
                 && keysKeeper.PressedKeyCodeEvents.TryGetValue(key, out var pressEventEntity))
             {
                 ref var pressEventComponent = ref pressKeyEventsPool.Value.Get(pressEventEntity);
@@ -64,7 +64,7 @@ namespace Systems
 
         private void HandleKeyDownEvent(ref PressedKeysKeeperComponent keysKeeper, KeyCode key)
         {
-            if (!Input.GetKeyDown(key))
+            if (!UnityEngine.Input.GetKeyDown(key))
                 return;
 
             if (keysKeeper.PressedKeyCodeEvents.ContainsKey(key))
@@ -95,7 +95,7 @@ namespace Systems
                 keysKeeper.PressedKeyCodeEvents.Remove(key);
             }
 
-            if (Input.GetKeyUp(key))
+            if (UnityEngine.Input.GetKeyUp(key))
             {
                 pressKeyUpEventsPool.Value.Add(pressedKeyCodeEntity);
             }

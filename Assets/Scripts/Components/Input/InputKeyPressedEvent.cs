@@ -1,7 +1,6 @@
-﻿using Models.Input;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Components
+namespace Components.Input
 {
     public struct InputKeyPressedEvent
     {

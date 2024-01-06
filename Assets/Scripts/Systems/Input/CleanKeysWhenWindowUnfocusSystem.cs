@@ -1,10 +1,11 @@
 ﻿using Components;
+using Components.Input;
 using Helpers;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 using UnityEngine;
 
-namespace Systems
+namespace Systems.Input
 {
     public class CleanKeysWhenWindowUnfocusSystem : IEcsRunSystem
     {
