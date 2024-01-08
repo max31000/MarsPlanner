@@ -35,6 +35,9 @@ public class EcsEntryPoint : MonoBehaviour
             .Add(new BuildingPlaceSelectionSystem())
             .Add(new BuildingProcessVisualizationSystem())
             .Add(new BuildingInstallSystem())
+            .Add(new BuildingInstallValidateSystem())
+            .Add(new CancelBuildingSystem())
+            .Add(new ResetBuildBufferSystem())
             .Inject(gameDefinitions)
 #if UNITY_EDITOR
             // не выносить префикс неймспейса в юзинг, поломается релизный билд

@@ -19,15 +19,21 @@ namespace Systems.Buildings
 
         public void Run(IEcsSystems systems)
         {
-            if (buildPlaceFilter.Value.GetEntitiesCount() == 0 ||
-                raycastCoordinatesFilter.Value.GetEntitiesCount() == 0)
+            if (raycastCoordinatesFilter.Value.GetEntitiesCount() == 0)
                 return;
 
-            ref var buildComponent = ref buildPlacePool.Value.Get(buildPlaceFilter.Value.Single());
-            var raycastCoordinatesEntity = raycastCoordinatesFilter.Value.Single();
-            ref var coordinatesComponent = ref coordinatesCollectorPool.Value.Get(raycastCoordinatesEntity);
+            foreach (var buildPlaceComponent in buildPlaceFilter.Value)
+            {
+                ref var buildComponent = ref buildPlacePool.Value.Get(buildPlaceComponent);
+                var raycastCoordinatesEntity = raycastCoordinatesFilter.Value.Single();
+                ref var coordinatesComponent = ref coordinatesCollectorPool.Value.Get(raycastCoordinatesEntity);
 
-            buildComponent.Position = coordinatesComponent.TerrainRaycastIntersectCoordinates;
+                buildComponent.Position = new Vector3(
+                    Mathf.Round(coordinatesComponent.TerrainRaycastIntersectCoordinates.x / 2) * 2,
+                    coordinatesComponent.TerrainRaycastIntersectCoordinates.y,
+                    Mathf.Round(coordinatesComponent.TerrainRaycastIntersectCoordinates.z / 2) * 2
+                );
+            }
         }
     }
 }

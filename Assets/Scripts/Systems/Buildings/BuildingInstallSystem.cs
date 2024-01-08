@@ -20,6 +20,9 @@ namespace Systems.Buildings
         private readonly EcsFilterInject<Inc<PlaceBuildProcessingComponent>> buildPlaceFilter = null;
         private readonly EcsPoolInject<PlaceBuildProcessingComponent> buildPlacePool = null;
 
+        private readonly EcsPoolInject<InstalledBuildComponent> installedBuildPool = null;
+
+
         private readonly EcsFilterInject<Inc<RaycastObjectEvent>> raycastObjectEventFilter = null;
 
 
@@ -29,28 +32,30 @@ namespace Systems.Buildings
                 raycastObjectEventFilter.Value.GetEntitiesCount() == 0)
                 return;
 
-            ref var buildingPlaceComponent = ref buildPlacePool.Value.Get(buildPlaceFilter.Value.Single());
+            foreach (var buildPlaceEntity in buildPlaceFilter.Value)
+            {
+                ref var buildingPlaceComponent = ref buildPlacePool.Value.Get(buildPlaceEntity);
 
-            InstantiateNewBuilding(ref buildingPlaceComponent);
-            ResetBufferObjectPosition(ref buildingPlaceComponent);
+                if (!buildingPlaceComponent.IsCanInstall)
+                    return;
+
+                InstantiateNewBuilding(ref buildingPlaceComponent);
+            }
         }
 
         private void InstantiateNewBuilding(ref PlaceBuildProcessingComponent buildingPlaceComponent)
         {
             ref var buildingAssetsComponent = ref buildingAssetsPool.Value.Get(buildingAssetsFilter.Value.Single());
             var buildingAsset = buildingAssetsComponent.BuildingsAssets[buildingPlaceComponent.Type];
-            Object.Instantiate(
+            var installedBuild = Object.Instantiate(
                 buildingAsset,
                 buildingPlaceComponent.Position,
                 Quaternion.Euler(buildingPlaceComponent.Rotation)
             );
-        }
 
-        private void ResetBufferObjectPosition(ref PlaceBuildProcessingComponent buildingPlaceComponent)
-        {
-            ref var buildingBuffer = ref buildingsBufferPool.Value.Get(buildingsBufferFilter.Value.Single());
-            var buildingBufferObject = buildingBuffer.BuildingsBuffer[buildingPlaceComponent.Type].InstancedBuilding;
-            buildingBufferObject.transform.position = BufferConstants.BufferObjectsPosition;
+            ref var installedBuildComponent = ref installedBuildPool.NewEntity(out var _);
+            installedBuildComponent.Object = installedBuild;
+            installedBuildComponent.Type = buildingPlaceComponent.Type;
         }
     }
 }

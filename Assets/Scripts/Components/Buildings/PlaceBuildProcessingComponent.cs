@@ -7,7 +7,7 @@ namespace Components.Buildings
     {
         public BuildingTypes Type;
         public Vector3 Position;
-        public bool IsCantInstall;
+        public bool IsCanInstall;
         public Vector3 Size;
         public Vector3 Rotation;
     }

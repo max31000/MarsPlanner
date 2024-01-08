@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Components.Buildings;
 using Components.Input;
 using Components.Ui;
@@ -16,7 +14,7 @@ namespace Systems.Buildings
     {
         private readonly EcsFilterInject<Inc<BuildingsBufferComponent>> buildingBufferFilter = null;
         private readonly EcsPoolInject<BuildingsBufferComponent> buildingBufferPool = null;
-        
+
         private readonly EcsFilterInject<Inc<PlaceBuildProcessingComponent>> buildPlaceFilter = null;
         private readonly EcsPoolInject<PlaceBuildProcessingComponent> buildPlacePool = null;
 
@@ -27,7 +25,8 @@ namespace Systems.Buildings
         private readonly EcsFilterInject<Inc<ButtonOnClickEvent, ButtonReadyToProcessComponent>> onClickFilter = null;
 
         private readonly EcsFilterInject<Inc<RaycastTargetComponent>> raycastTargetFilter = null;
-        private readonly EcsPoolInject<RaycastTargetComponent> raycastTargetPool = null;
+
+        private readonly EcsPoolInject<ResetBufferEvent> resetBufferPool = null;
 
 
         public void Run(IEcsSystems systems)
@@ -64,21 +63,30 @@ namespace Systems.Buildings
             if (buildPlaceFilter.Value.GetEntitiesCount() == 0)
             {
                 ref var buildPlaceComponent = ref buildPlacePool.NewEntity(out var _);
-                UpdateBuildComponentData(buildType, ref buildPlaceComponent);
+                UpdateBuildComponentData(buildType, ref buildPlaceComponent, true);
             }
-            else
+
+            foreach (var buildPlaceEntity in buildPlaceFilter.Value)
             {
-                ref var buildPlaceComponent = ref buildPlacePool.Value.Get(buildPlaceFilter.Value.Single());
-                UpdateBuildComponentData(buildType, ref buildPlaceComponent);
+                ref var buildPlaceComponent = ref buildPlacePool.Value.Get(buildPlaceEntity);
+                UpdateBuildComponentData(buildType, ref buildPlaceComponent, false);
             }
         }
 
-        private void UpdateBuildComponentData(BuildingTypes buildType, ref PlaceBuildProcessingComponent buildPlaceComponent)
+        private void UpdateBuildComponentData(BuildingTypes buildType,
+            ref PlaceBuildProcessingComponent buildPlaceComponent, bool newBuilding)
         {
             ref var buildBuffer = ref buildingBufferPool.Value.Get(buildingBufferFilter.Value.Single());
             var buildingBufferObject = buildBuffer.BuildingsBuffer[buildPlaceComponent.Type];
 
-            buildPlaceComponent.Size = buildingBufferObject.InstancedBuilding.GetComponentInChildren<Collider>().bounds.size;
+            if (buildType != buildPlaceComponent.Type && !newBuilding)
+            {
+                ref var resetBufferEvent = ref resetBufferPool.NewEntity(out _);
+                resetBufferEvent.Type = buildPlaceComponent.Type;
+            }
+
+            buildPlaceComponent.Size =
+                buildingBufferObject.InstancedBuilding.GetComponentInChildren<Collider>().bounds.size;
             buildPlaceComponent.Type = buildType;
         }
     }

@@ -12,7 +12,7 @@ namespace Helpers
                 throw new ArgumentException("The number of elements in the collection is not equal to one");
             }
 
-            var enumerator = filter.GetEnumerator();
+            using var enumerator = filter.GetEnumerator();
             enumerator.MoveNext();
             return enumerator.Current;
         }

@@ -15,15 +15,15 @@ namespace Systems.Buildings
         
         public void Run(IEcsSystems systems)
         {
-            if(buildPlaceFilter.Value.GetEntitiesCount() == 0)
-                return;
-
-            ref var buildingPlaceComponent = ref buildPlacePool.Value.Get(buildPlaceFilter.Value.Single());
-
             ref var buildingBuffer = ref buildingsBufferPool.Value.Get(buildingsBufferFilter.Value.Single());
-            var buildingBufferObject = buildingBuffer.BuildingsBuffer[buildingPlaceComponent.Type].InstancedBuilding;
 
-            buildingBufferObject.transform.position = buildingPlaceComponent.Position;
+            foreach (var buildPlaceComponent in buildPlaceFilter.Value)
+            {
+                ref var buildingPlaceComponent = ref buildPlacePool.Value.Get(buildPlaceComponent);
+                var buildingBufferObject = buildingBuffer.BuildingsBuffer[buildingPlaceComponent.Type].InstancedBuilding;
+
+                buildingBufferObject.transform.position = buildingPlaceComponent.Position;
+            }
         }
     }
 }

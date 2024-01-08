@@ -43,9 +43,9 @@ namespace Systems.Input
                 return;
 
             var buildingPosition = hit.point;
-            coordinatesCollectorComponent.TerrainRaycastIntersectCoordinates.x = Mathf.Round(buildingPosition.x);
+            coordinatesCollectorComponent.TerrainRaycastIntersectCoordinates.x = buildingPosition.x;
             coordinatesCollectorComponent.TerrainRaycastIntersectCoordinates.y = buildingPosition.y;
-            coordinatesCollectorComponent.TerrainRaycastIntersectCoordinates.z = Mathf.Round(buildingPosition.z);
+            coordinatesCollectorComponent.TerrainRaycastIntersectCoordinates.z = buildingPosition.z;
         }
     }
 }
