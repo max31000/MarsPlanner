@@ -6,6 +6,7 @@ using Components;
 using Components.Buildings;
 using Components.Input;
 using Definitions;
+using Definitions.Constants;
 using Helpers;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
@@ -64,8 +65,7 @@ namespace Systems.Initialize
 
         private void LoadBuildings()
         {
-            ref var buildingAssetComponent = ref buildingAssetsPool.NewEntity(out var buildingAssetEntity);
-
+            ref var buildingAssetComponent = ref buildingAssetsPool.NewEntity(out var _);
             buildingAssetComponent.BuildingsAssets = LoadBuildingAssets();
 
             LoadBuildingBuffer(buildingAssetComponent.BuildingsAssets);
@@ -80,7 +80,7 @@ namespace Systems.Initialize
                         Tag: x.Key,
                         Obj: Object.Instantiate(
                             x.Value,
-                            new Vector3(0, -500, 0),
+                            BufferConstants.BufferObjectsPosition,
                             Quaternion.Euler(0, 0, 0)
                         )
                     )

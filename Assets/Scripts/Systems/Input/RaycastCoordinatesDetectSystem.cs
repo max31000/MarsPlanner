@@ -39,12 +39,12 @@ namespace Systems.Input
             var isSkipUiRaycast = EventSystem.current.IsPointerOverGameObject() &&
                                   coordinatesCollectorComponent.TerrainRaycastIntersectCoordinates != default;
 
-            if (isSkipUiRaycast || raycastResult)
+            if (!raycastResult || isSkipUiRaycast)
                 return;
 
             var buildingPosition = hit.point;
             coordinatesCollectorComponent.TerrainRaycastIntersectCoordinates.x = Mathf.Round(buildingPosition.x);
-            coordinatesCollectorComponent.TerrainRaycastIntersectCoordinates.y = Mathf.Round(buildingPosition.y);
+            coordinatesCollectorComponent.TerrainRaycastIntersectCoordinates.y = buildingPosition.y;
             coordinatesCollectorComponent.TerrainRaycastIntersectCoordinates.z = Mathf.Round(buildingPosition.z);
         }
     }
