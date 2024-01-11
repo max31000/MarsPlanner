@@ -42,7 +42,7 @@ namespace Systems.Buildings
         {
             ref var buttonComponent = ref buttonPool.Value.Get(clickEvent);
 
-            if (!Enum.TryParse(typeof(BuildingTypes), buttonComponent.ButtonName, out var resultType))
+            if (!Enum.TryParse(typeof(BuildingType), buttonComponent.ButtonName, out var resultType))
                 return;
 
             CreateRaycastCollector();
@@ -59,7 +59,7 @@ namespace Systems.Buildings
 
         private void CreateBuildPlaceComponent(object resultType)
         {
-            var buildType = (BuildingTypes)resultType;
+            var buildType = (BuildingType)resultType;
             if (buildPlaceFilter.Value.GetEntitiesCount() == 0)
             {
                 ref var buildPlaceComponent = ref buildPlacePool.NewEntity(out var _);
@@ -73,7 +73,7 @@ namespace Systems.Buildings
             }
         }
 
-        private void UpdateBuildComponentData(BuildingTypes buildType,
+        private void UpdateBuildComponentData(BuildingType buildType,
             ref PlaceBuildProcessingComponent buildPlaceComponent, bool newBuilding)
         {
             ref var buildBuffer = ref buildingBufferPool.Value.Get(buildingBufferFilter.Value.Single());
@@ -85,8 +85,8 @@ namespace Systems.Buildings
                 resetBufferEvent.Type = buildPlaceComponent.Type;
             }
 
-            buildPlaceComponent.Size =
-                buildingBufferObject.InstancedBuilding.GetComponentInChildren<Collider>().bounds.size;
+            buildPlaceComponent.Bounds =
+                buildingBufferObject.InstancedBuilding.GetComponentInChildren<Collider>().bounds;
             buildPlaceComponent.Type = buildType;
         }
     }

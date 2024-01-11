@@ -4,6 +4,6 @@ namespace Components.Buildings
 {
     public struct ResetBufferEvent
     {
-        public BuildingTypes Type;
+        public BuildingType Type;
     }
 }

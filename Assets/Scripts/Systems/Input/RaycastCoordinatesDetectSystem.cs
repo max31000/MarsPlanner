@@ -42,10 +42,10 @@ namespace Systems.Input
             if (!raycastResult || isSkipUiRaycast)
                 return;
 
-            var buildingPosition = hit.point;
-            coordinatesCollectorComponent.TerrainRaycastIntersectCoordinates.x = buildingPosition.x;
-            coordinatesCollectorComponent.TerrainRaycastIntersectCoordinates.y = buildingPosition.y;
-            coordinatesCollectorComponent.TerrainRaycastIntersectCoordinates.z = buildingPosition.z;
+            var raycastHitPoint = hit.point;
+            coordinatesCollectorComponent.TerrainRaycastIntersectCoordinates.x = raycastHitPoint.x;
+            coordinatesCollectorComponent.TerrainRaycastIntersectCoordinates.y = raycastHitPoint.y;
+            coordinatesCollectorComponent.TerrainRaycastIntersectCoordinates.z = raycastHitPoint.z;
         }
     }
 }

@@ -5,10 +5,10 @@ namespace Components.Buildings
 {
     public struct PlaceBuildProcessingComponent
     {
-        public BuildingTypes Type;
+        public BuildingType Type;
         public Vector3 Position;
         public bool IsCanInstall;
-        public Vector3 Size;
+        public Bounds Bounds;
         public Vector3 Rotation;
     }
 }

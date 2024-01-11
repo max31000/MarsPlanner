@@ -29,9 +29,9 @@ namespace Systems.Buildings
                 ref var coordinatesComponent = ref coordinatesCollectorPool.Value.Get(raycastCoordinatesEntity);
 
                 buildComponent.Position = new Vector3(
-                    Mathf.Round(coordinatesComponent.TerrainRaycastIntersectCoordinates.x / 2) * 2,
+                    Mathf.Round(coordinatesComponent.TerrainRaycastIntersectCoordinates.x),
                     coordinatesComponent.TerrainRaycastIntersectCoordinates.y,
-                    Mathf.Round(coordinatesComponent.TerrainRaycastIntersectCoordinates.z / 2) * 2
+                    Mathf.Round(coordinatesComponent.TerrainRaycastIntersectCoordinates.z)
                 );
             }
         }

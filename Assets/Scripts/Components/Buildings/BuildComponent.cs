@@ -3,9 +3,9 @@ using UnityEngine;
 
 namespace Components.Buildings
 {
-    public struct InstalledBuildComponent
+    public struct BuildComponent
     {
-        public BuildingTypes Type;
+        public BuildingType Type;
 
         public GameObject Object;
     }

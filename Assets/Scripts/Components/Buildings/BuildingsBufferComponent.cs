@@ -5,6 +5,6 @@ namespace Components.Buildings
 {
     public struct BuildingsBufferComponent
     {
-        public Dictionary<BuildingTypes, BuildingBuffer> BuildingsBuffer;
+        public Dictionary<BuildingType, BuildingBuffer> BuildingsBuffer;
     }
 }

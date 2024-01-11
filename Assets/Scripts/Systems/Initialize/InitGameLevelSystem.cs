@@ -71,7 +71,7 @@ namespace Systems.Initialize
             LoadBuildingBuffer(buildingAssetComponent.BuildingsAssets);
         }
 
-        private void LoadBuildingBuffer(Dictionary<BuildingTypes, GameObject> buildingsAssets)
+        private void LoadBuildingBuffer(Dictionary<BuildingType, GameObject> buildingsAssets)
         {
             ref var buildingsBufferComponent = ref buildingBufferPool.NewEntity(out var _);
             buildingsBufferComponent.BuildingsBuffer = buildingsAssets
@@ -85,14 +85,34 @@ namespace Systems.Initialize
                         )
                     )
                 )
-                .ToDictionary(x => x.Tag, x => new BuildingBuffer { InstancedBuilding = x.Obj });
+                // Настраиваю размеры буфферных зданий для рассчёта пересечений с ними при установке.
+                .Select(x =>
+                {
+                    var collider = x.Obj.GetComponentInChildren<Collider>();
+                    
+                    x.Obj.layer = 6;
+                    collider.gameObject.layer = 6;
+
+                    var colliderType = collider is SphereCollider ? ColliderType.Sphere : ColliderType.Box;
+                    var startBounds = collider.bounds.size;
+
+                    Debug.Log($"name: {x.Tag}, type: {colliderType.ToString()}, sourceType: {collider.GetType()}");
+
+                    return (x.Tag, Buffer: new BuildingBuffer
+                    {
+                        InstancedBuilding = x.Obj,
+                        ColliderType = colliderType,
+                        StartBoundSize = startBounds
+                    });
+                })
+                .ToDictionary(x => x.Tag, x => x.Buffer);
         }
 
-        private static Dictionary<BuildingTypes, GameObject> LoadBuildingAssets()
+        private static Dictionary<BuildingType, GameObject> LoadBuildingAssets()
         {
-            var assets = new Dictionary<BuildingTypes, GameObject>();
+            var assets = new Dictionary<BuildingType, GameObject>();
 
-            foreach (BuildingTypes buildType in Enum.GetValues(typeof(BuildingTypes)))
+            foreach (BuildingType buildType in Enum.GetValues(typeof(BuildingType)))
             {
                 var type = buildType.ToString();
                 var path = @"Prefabs/Buildings/" + type;

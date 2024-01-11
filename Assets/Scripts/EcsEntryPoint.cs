@@ -8,6 +8,7 @@ using Systems.Initialize;
 using Systems.Input;
 using Systems.Ui;
 using Systems.Ui.Initialize;
+using Systems.Unit;
 using UnityEngine;
 
 public class EcsEntryPoint : MonoBehaviour
@@ -38,6 +39,10 @@ public class EcsEntryPoint : MonoBehaviour
             .Add(new BuildingInstallValidateSystem())
             .Add(new CancelBuildingSystem())
             .Add(new ResetBuildBufferSystem())
+            .Add(new BuildingMaterialSystem())
+            .Add(new BuildingRotationSystem())
+            .Add(new BuildBufferBoundsUpdateSystem())
+            .Add(new UnitGoSystem())
             .Inject(gameDefinitions)
 #if UNITY_EDITOR
             // не выносить префикс неймспейса в юзинг, поломается релизный билд

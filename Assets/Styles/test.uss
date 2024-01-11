@@ -1,0 +1,32 @@
+.build-panel {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-left: 30px; /* Increased left indent */
+    background-color: #2A2B2E; /* A different shade of dark gray */
+    height: 100px; /* Adjusted for larger buttons */
+    width: 100%; /* Full width */
+    border-bottom-width: 3px;
+    border-bottom-color: #FF6A00; /* Stroke at the bottom of the panel */
+}
+
+.build-button {
+    background-color: #FF7043; /* Warm, light Martian orange */
+    width: 70px; /* Increased size for square shape */
+    height: 70px;
+    border-radius: 10px; /* Slightly larger rounded corners */
+    border-width: 2px;
+    border-color: #E5E5E5; /* Light stroke for contrast */
+    margin-right: 30px; /* Increased distance between buttons */
+    transition: transform 0.3s, background-color 0.3s;
+}
+
+.build-button:hover {
+    background-color: #FFA07A; /* Lighter orange on hover */
+    transform: scale(1.1); /* Slight increase in size on hover */
+}
+
+.build-button:active {
+    background-color: #FF5722; /* Darker orange on active/click */
+    transform: scale(0.95); /* Slight decrease in size on active/click */
+}

@@ -26,6 +26,7 @@ namespace Systems.Buildings
                 ref var resetBufferEvent = ref resetBufferEventPool.Value.Get(resetBufferEntity);
                 var objectToReset = bufferComponent.BuildingsBuffer[resetBufferEvent.Type].InstancedBuilding;
                 objectToReset.transform.position = BufferConstants.BufferObjectsPosition;
+                objectToReset.transform.rotation = BufferConstants.BufferObjectRotation;
                 resetBufferEventPool.Value.Del(resetBufferEntity);
             }
         }

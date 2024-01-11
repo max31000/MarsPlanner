@@ -6,6 +6,6 @@ namespace Components.Buildings
 {
     public struct BuildingAssetsComponent
     {
-        public Dictionary<BuildingTypes, GameObject> BuildingsAssets;
+        public Dictionary<BuildingType, GameObject> BuildingsAssets;
     }
 }

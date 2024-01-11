@@ -20,7 +20,7 @@ namespace Systems.Buildings
         private readonly EcsFilterInject<Inc<PlaceBuildProcessingComponent>> buildPlaceFilter = null;
         private readonly EcsPoolInject<PlaceBuildProcessingComponent> buildPlacePool = null;
 
-        private readonly EcsPoolInject<InstalledBuildComponent> installedBuildPool = null;
+        private readonly EcsPoolInject<BuildComponent> installedBuildPool = null;
 
 
         private readonly EcsFilterInject<Inc<RaycastObjectEvent>> raycastObjectEventFilter = null;

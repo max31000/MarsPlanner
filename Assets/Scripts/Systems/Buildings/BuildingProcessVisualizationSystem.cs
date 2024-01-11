@@ -2,6 +2,7 @@
 using Helpers;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
+using UnityEngine;
 
 namespace Systems.Buildings
 {
@@ -23,6 +24,7 @@ namespace Systems.Buildings
                 var buildingBufferObject = buildingBuffer.BuildingsBuffer[buildingPlaceComponent.Type].InstancedBuilding;
 
                 buildingBufferObject.transform.position = buildingPlaceComponent.Position;
+                buildingBufferObject.transform.rotation = Quaternion.Euler(buildingPlaceComponent.Rotation);
             }
         }
     }

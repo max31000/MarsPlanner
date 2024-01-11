@@ -1,46 +1,44 @@
-﻿using System.Linq;
+﻿using System;
 using Components.Buildings;
 using Helpers;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
+using Models.Buildings;
 using UnityEngine;
 
 namespace Systems.Buildings
 {
     public class BuildingInstallValidateSystem : IEcsRunSystem
     {
+        private readonly EcsFilterInject<Inc<BuildingsBufferComponent>> buildBufferFilter = null;
         private readonly EcsFilterInject<Inc<PlaceBuildProcessingComponent>> buildPlaceFilter = null;
         private readonly EcsPoolInject<PlaceBuildProcessingComponent> buildPlacePool = null;
 
-        private readonly EcsFilterInject<Inc<InstalledBuildComponent>> installedBuildFilter = null;
-        private readonly EcsPoolInject<InstalledBuildComponent> installedBuildPool = null;
-
         public void Run(IEcsSystems systems)
         {
-            foreach (var buildPlaceComponent in buildPlaceFilter.Value)
+            foreach (var buildPlaceEntity in buildPlaceFilter.Value)
             {
-                ref var buildingPlaceComponent = ref buildPlacePool.Value.Get(buildPlaceComponent);
+                ref var buildingPlaceComponent = ref buildPlacePool.Value.Get(buildPlaceEntity);
 
-                buildingPlaceComponent.IsCanInstall =
-                    HasBuildIntersects(buildingPlaceComponent.Position, buildingPlaceComponent.Size);
+                ref var buildBufferComponent = ref buildBufferFilter.Pools.Inc1.Get(buildBufferFilter.Value.Single());
+
+                buildingPlaceComponent.IsCanInstall = !HasBuildIntersects(
+                    buildingPlaceComponent.Position,
+                    buildingPlaceComponent.Rotation,
+                    buildBufferComponent.BuildingsBuffer[buildingPlaceComponent.Type]
+                );
             }
         }
 
-        private bool HasBuildIntersects(Vector3 currentPos, Vector3 currentSize)
+        private static bool HasBuildIntersects(Vector3 position, Vector3 rotation, BuildingBuffer buildingBuffer)
         {
-            foreach (var installedBuildEntity in installedBuildFilter.Value)
+            var layerMask = LayerMask.GetMask("Default");
+            return buildingBuffer.ColliderType switch
             {
-                ref var installedBuildComponent = ref installedBuildPool.Value.Get(installedBuildEntity);
-
-                var canInstall = !installedBuildComponent
-                    .Object.GetComponentsInChildren<Collider>()
-                    .Any(b => b.bounds.Intersects(new Bounds(currentPos, currentSize)));
-
-                if (!canInstall)
-                    return false;
-            }
-
-            return true;
+                ColliderType.Sphere => Physics.CheckSphere(position, buildingBuffer.StartBoundSize.x / 2, layerMask),
+                ColliderType.Box => Physics.CheckBox(position, buildingBuffer.StartBoundSize / 2, Quaternion.Euler(rotation), layerMask),
+                _ => throw new ArgumentOutOfRangeException()
+            };
         }
     }
 }

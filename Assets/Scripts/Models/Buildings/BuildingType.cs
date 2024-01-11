@@ -1,6 +1,6 @@
 ﻿namespace Models.Buildings
 {
-    public enum BuildingTypes
+    public enum BuildingType
     {
         Gateway,
         ControlCentre,

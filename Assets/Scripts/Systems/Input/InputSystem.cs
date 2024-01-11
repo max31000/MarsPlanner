@@ -86,8 +86,6 @@ namespace Systems.Input
             if (!keysKeeper.PressedKeyCodeEvents.TryGetValue(key, out var pressedKeyCodeEntity))
                 return;
 
-            ref var component = ref pressKeyEventsPool.Value.Get(pressedKeyCodeEntity);
-
             if (pressKeyUpEventsFilter.Value.Contains(pressedKeyCodeEntity))
             {
                 pressKeyEventsPool.Value.Del(pressedKeyCodeEntity);
