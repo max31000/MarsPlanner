@@ -32,10 +32,11 @@ namespace Systems.Buildings
             foreach (var placeBuildEntity in placeBuildFilter.Value)
             {
                 ref var placeBuildComponent = ref placeBuildFilter.Pools.Inc1.Get(placeBuildEntity);
+                var rotateAngle = placeBuildComponent.Type == BuildingType.Passageway ? 45 : 90;
 
                 placeBuildComponent.Rotation = new Vector3(
                     placeBuildComponent.Rotation.x,
-                    placeBuildComponent.Rotation.y + 45,
+                    placeBuildComponent.Rotation.y + rotateAngle,
                     placeBuildComponent.Rotation.z
                 );
             }

@@ -23,6 +23,7 @@ public class EcsEntryPoint : MonoBehaviour
         systems = new EcsSystems(world);
         systems
             .Add(new InitGameLevelSystem())
+            .Add(new TerrainInitializeSystem())
             .Add(new CubeSystem())
             .Add(new InputSystem())
             .Add(new CameraSystem())
@@ -41,7 +42,6 @@ public class EcsEntryPoint : MonoBehaviour
             .Add(new ResetBuildBufferSystem())
             .Add(new BuildingMaterialSystem())
             .Add(new BuildingRotationSystem())
-            .Add(new BuildBufferBoundsUpdateSystem())
             .Add(new UnitGoSystem())
             .Inject(gameDefinitions)
 #if UNITY_EDITOR
