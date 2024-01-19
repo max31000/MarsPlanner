@@ -27,6 +27,8 @@ public class EcsEntryPoint : MonoBehaviour
             .Add(new CubeSystem())
             .Add(new InputSystem())
             .Add(new CameraSystem())
+            .Add(new UnderCameraHeightCalculateSystem())
+            .Add(new CameraPositionApplierSystem())
             .Add(new CleanKeysWhenWindowUnfocusSystem())
             .Add(new RaycastObjectSystem())
             .Add(new RaycastCoordinatesDetectSystem())

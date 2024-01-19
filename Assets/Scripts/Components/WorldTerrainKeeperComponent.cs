@@ -2,8 +2,8 @@
 
 namespace Components
 {
-    public class WorldTerrainKeeperComponent
+    public struct WorldTerrainKeeperComponent
     {
-        public GameObject Terrain;
+        public Terrain Terrain;
     }
 }

@@ -1,6 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Components;
 using Helpers;
 using Leopotam.EcsLite;
+using Leopotam.EcsLite.Di;
 using UnityEditor.AI;
 using UnityEngine;
 
@@ -8,14 +11,27 @@ namespace Systems.Initialize
 {
     public class TerrainInitializeSystem : IEcsPreInitSystem
     {
+        private readonly EcsPoolInject<WorldTerrainKeeperComponent> worldTerrainKeeperPool = null;
+
         public void PreInit(IEcsSystems systems)
         {
-            //NavMeshBuilder.ClearAllNavMeshes();
-            //NavMeshBuilder.BuildNavMesh();
+            // отключаю генерацию на время разработки
+            /*NavMeshBuilder.ClearAllNavMeshes();
+            NavMeshBuilder.BuildNavMesh();
             var generator = new HeightMapGenerator();
-            var heightMap = generator.Generate();
-            var terrain = Object.FindObjectsOfType<Terrain>();
-            terrain.Single().terrainData.SetHeights(0, 0, heightMap);
+            var heightMap = generator.Generate();*/
+
+            var terrain = Object.FindObjectsOfType<Terrain>().Single();
+            //terrain.terrainData.SetHeights(0, 0, heightMap);
+
+            ref var terrainKeeperComponent = ref worldTerrainKeeperPool.NewEntity(out _);
+            terrainKeeperComponent.Terrain = terrain;
+
+            //SetTextures(heightMap, terrain);
+        }
+
+        private static void SetTextures(float[,] heightMap, Terrain terrain)
+        {
             var width = heightMap.GetLength(0);
             var height = heightMap.GetLength(1);
             var textureMap = new float[width - 1, height - 1, 3];
@@ -23,20 +39,20 @@ namespace Systems.Initialize
             for (var y = 0; y < height - 1; y++)
             {
                 var terrainHeight = heightMap[x, y];
-                var layer = 0;
                 if (terrainHeight <= 0.001f)
                 {
-                    layer = 1;
+                    textureMap[x, y, 0] = 0.8f;
+                    textureMap[x, y, 1] = 0.2f;
                 }
-
-                if (terrainHeight >= 0.1f)
+                else
                 {
-                    layer = 2;
+                    textureMap[x, y, 0] = 0.5f;
+                    textureMap[x, y, 1] = 0.5f;
                 }
 
-                textureMap[x, y, layer] = 1;
             }
-            terrain.Single().terrainData.SetAlphamaps(0, 0, textureMap);
+
+            terrain.terrainData.SetAlphamaps(0, 0, textureMap);
         }
     }
 }

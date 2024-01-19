@@ -13,6 +13,7 @@ namespace Systems.Camera
         private readonly EcsPoolInject<CameraComponent> cameraComponentsPool = null;
         private readonly EcsFilterInject<Inc<InputKeyPressedEvent>> pressedKeyEventsFilter = null;
         private readonly EcsPoolInject<InputKeyPressedEvent> pressedKeyEventsPool = null;
+        private readonly EcsFilterInject<Inc<WorldTerrainKeeperComponent>> terrainKeeperFilter = null;
 
         public void Run(IEcsSystems systems)
         {
@@ -46,7 +47,6 @@ namespace Systems.Camera
 
             CalculateAndMoveCamera(rotateDirection, leftRightDirection, aheadBackDirection, verticalDirection,
                 ref cameraComponent);
-            CorrectCamera(ref cameraComponent);
         }
 
         private int CalculateDirection(KeyCode positiveKey, KeyCode negativeKey, KeyCode inputKey)
@@ -64,68 +64,64 @@ namespace Systems.Camera
         private void CalculateAndMoveCamera(float rotateDirection, float leftRightDirection, float aheadBackDirection,
             float verticalDirection, ref CameraComponent cameraComponent)
         {
-            var movement = new Vector3(leftRightDirection, 0, aheadBackDirection) * cameraComponent.speed;
-            movement = Vector3.ClampMagnitude(movement, cameraComponent.speed) * Time.deltaTime;
-            var verticalDelta = verticalDirection * cameraComponent.verticalMoveStepFactor;
+            var movement = new Vector3(leftRightDirection, 0, aheadBackDirection) * cameraComponent.Speed;
+            movement = Vector3.ClampMagnitude(movement, cameraComponent.Speed) * Time.deltaTime;
+            var verticalDelta = verticalDirection * cameraComponent.VerticalMoveStepFactor;
 
             if (Math.Abs(verticalDelta) != 0)
-                if (Math.Abs(cameraComponent.distanceToTargetCameraHeigth + verticalDelta) <
+                if (Math.Abs(cameraComponent.DistanceToTargetCameraHeight + verticalDelta) <
                     CameraComponent.InertionCameraMultiplier)
-                    cameraComponent.distanceToTargetCameraHeigth += verticalDelta;
+                    cameraComponent.DistanceToTargetCameraHeight += verticalDelta;
 
-            var verticalShift = cameraComponent.distanceToTargetCameraHeigth *
-                                cameraComponent.cameraConvergenceWithTargetValueSpeed * Time.deltaTime;
+            var verticalShift = cameraComponent.DistanceToTargetCameraHeight *
+                                cameraComponent.CameraConvergenceWithTargetValueSpeed * Time.deltaTime;
 
-            if (Math.Abs(cameraComponent.distanceToTargetCameraHeigth) > 0.5f)
+            if (Math.Abs(cameraComponent.DistanceToTargetCameraHeight) > 0.5f)
             {
                 movement.y = verticalShift;
-                cameraComponent.distanceToTargetCameraHeigth -= verticalShift;
+                cameraComponent.DistanceToTargetCameraHeight -= verticalShift;
             }
 
-            if (movement.y > 0 && cameraComponent.Camera.transform.position.y > cameraComponent.maxHeigth)
+            if (movement.y > 0 && cameraComponent.Position.y > cameraComponent.MaxHeight)
                 movement.y = 0;
 
-            if (movement.y < 0 && cameraComponent.Camera.transform.position.y < cameraComponent.minHeigth)
+            if (movement.y < 0 && cameraComponent.Position.y < cameraComponent.MinHeight)
                 movement.y = 0;
 
-            var rotateDelta = rotateDirection * cameraComponent.rotateSpeed * Time.deltaTime;
+            var rotateDelta = rotateDirection * cameraComponent.RotateSpeed * Time.deltaTime;
 
-            MoveCamera(rotateDelta, movement, cameraComponent);
+            MoveCamera(rotateDelta, movement, ref cameraComponent);
         }
 
-        private void MoveCamera(float rotateDelta, Vector3 movement, CameraComponent cameraComponent)
-        {
-            cameraComponent.Camera.transform.Rotate(Vector3.up * rotateDelta,
-                Space.World);
-
-            var angle = cameraComponent.Camera.transform.rotation;
-            cameraComponent.Camera.transform.SetPositionAndRotation(cameraComponent.Camera.transform.position,
-                Quaternion.Euler(0, angle.eulerAngles.y, angle.eulerAngles.z));
-            cameraComponent.Camera.transform.Translate(movement.x, 0, movement.z, Space.Self);
-            cameraComponent.Camera.transform.SetPositionAndRotation(cameraComponent.Camera.transform.position, angle);
-
-            cameraComponent.Camera.transform.Translate(0, movement.y, 0, Space.World);
-            cameraComponent.Camera.transform.Rotate(Vector3.right,
-                movement.y * CameraComponent.rotateCameraMultiplier /
-                (cameraComponent.maxHeigth - cameraComponent.minHeigth));
-        }
-
-        private void CorrectCamera(ref CameraComponent cameraComponent)
+        private void MoveCamera(float rotateDelta, Vector3 movement, ref CameraComponent cameraComponent)
         {
             var cameraTransform = cameraComponent.Camera.transform;
-            var camX = cameraTransform.position.x;
-            var camZ = cameraTransform.position.z;
 
-            if (camX < cameraComponent.minX)
-                camX = cameraComponent.minX;
-            if (camX > cameraComponent.maxX)
-                camX = cameraComponent.maxX;
-            if (camZ < cameraComponent.minZ)
-                camZ = cameraComponent.minZ;
-            if (camZ > cameraComponent.maxZ)
-                camZ = cameraComponent.maxZ;
+            var movementVector = new Vector2(movement.x, movement.z);
 
-            cameraTransform.position = new Vector3(camX, cameraTransform.position.y, camZ);
+            var cameraAngle = cameraTransform.eulerAngles.y;
+            var radians = cameraAngle * Mathf.Deg2Rad;
+
+            var cos = Mathf.Cos(-radians);
+            var sin = Mathf.Sin(-radians);
+            var rotatedVector = new Vector2(
+                movementVector.x * cos - movementVector.y * sin,
+                movementVector.x * sin + movementVector.y * cos
+            );
+
+            cameraComponent.Position += new Vector3(rotatedVector.x, movement.y, rotatedVector.y);
+
+            cameraTransform.Rotate(Vector3.up * rotateDelta,
+                Space.World);
+
+            var angle = cameraTransform.rotation;
+            cameraTransform.SetPositionAndRotation(cameraTransform.position,
+                Quaternion.Euler(0, angle.eulerAngles.y, angle.eulerAngles.z));
+            cameraTransform.SetPositionAndRotation(cameraTransform.position, angle);
+
+            cameraTransform.Rotate(Vector3.right,
+                movement.y * CameraComponent.RotateCameraMultiplier /
+                (cameraComponent.MaxHeight - cameraComponent.MinHeight));
         }
     }
 }

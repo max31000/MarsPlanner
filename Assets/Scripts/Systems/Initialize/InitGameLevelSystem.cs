@@ -22,10 +22,11 @@ namespace Systems.Initialize
         private readonly EcsPoolInject<BuildingsBufferComponent> buildingBufferPool = null;
         private readonly EcsPoolInject<CameraComponent> cameraPool = null;
         private readonly EcsPoolInject<CubeComponent> cubePool = null;
+        private readonly EcsPoolInject<RaycastTargetComponent> raycastCoordinatesPool = null;
+        private readonly EcsFilterInject<Inc<WorldTerrainKeeperComponent>> worldTerrainKeeperFilter = null;
 
 
         private readonly EcsCustomInject<GameDefinitions> definitions = default;
-        private readonly EcsPoolInject<RaycastTargetComponent> raycastCoordinatesPool = null;
         private readonly EcsWorldInject world = null;
 
         public void Init(IEcsSystems systems)
@@ -41,8 +42,9 @@ namespace Systems.Initialize
             var cameraEntity = world.Value.NewEntity();
             ref var cameraComponent = ref cameraPool.Value.Add(cameraEntity);
 
+            var cameraPosition = new Vector3(20, 0, 20);
             cameraComponent.Initialize(definitions.Value.CameraDefinitions,
-                new Vector3(20, 0, 20));
+                cameraPosition);
         }
 
         private void LoadSystems()
@@ -95,8 +97,6 @@ namespace Systems.Initialize
 
                     var colliderType = collider is SphereCollider ? ColliderType.Sphere : ColliderType.Box;
                     var startBounds = collider.bounds.size;
-
-                    Debug.Log($"name: {x.Tag}, type: {colliderType.ToString()}, sourceType: {collider.GetType()}");
 
                     return (x.Tag, Buffer: new BuildingBuffer
                     {

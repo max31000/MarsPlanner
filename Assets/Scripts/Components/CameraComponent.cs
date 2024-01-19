@@ -5,22 +5,24 @@ namespace Components
     public struct CameraComponent
     {
         public Camera Camera;
+        public float UnderCameraTerrainHeight;
 
-        public static readonly float InertionCameraMultiplier = 8f;
+        public Vector3 Position;
 
-        public static readonly int rotateCameraMultiplier = 45;
+        public const float InertionCameraMultiplier = 8f;
+        public const int RotateCameraMultiplier = 45;
 
-        public float distanceToTargetCameraHeigth;
-        public float maxHeigth;
-        public float minHeigth;
-        public float rotateSpeed;
-        public float speed;
-        public float cameraConvergenceWithTargetValueSpeed;
-        public float verticalMoveStepFactor;
-        
-        public int minX; 
-        public int maxX;
-        public int minZ;
-        public int maxZ;
+        public float DistanceToTargetCameraHeight;
+        public float MaxHeight;
+        public float MinHeight;
+        public float RotateSpeed;
+        public float Speed;
+        public float CameraConvergenceWithTargetValueSpeed;
+        public float VerticalMoveStepFactor;
+
+        public int MinX;
+        public int MaxX;
+        public int MinZ;
+        public int MaxZ;
     }
 }

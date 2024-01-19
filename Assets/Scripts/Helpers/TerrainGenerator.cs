@@ -48,7 +48,7 @@ namespace Helpers
                     if (largeScaleNoise <= (float)i / formationSteps)
                         largeScaleNoise /= 1.2f;
 
-                float combinedNoise = Mathf.Max(largeScaleNoise * (1f - originalNoiseInfluenceFactor) + originalNoise * originalNoiseInfluenceFactor - originalNoiseInfluenceFactor / 2, 0);
+                float combinedNoise = Mathf.Max(largeScaleNoise * (1f - originalNoiseInfluenceFactor) + originalNoise * originalNoiseInfluenceFactor - originalNoiseInfluenceFactor / 3, 0);
 
                 combinedNoise *= (Math.Abs(x - (float)width / 2) + Math.Abs(y - (float)height / 2)) / (0.2f * (height + width));
 
