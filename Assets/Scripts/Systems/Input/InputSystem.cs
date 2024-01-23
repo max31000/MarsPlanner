@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Components;
 using Components.Input;
 using Helpers;
 using Leopotam.EcsLite;
@@ -13,12 +12,21 @@ namespace Systems.Input
     {
         private readonly EcsPoolInject<PressedKeysKeeperComponent> keyKeeperPool = null;
         private readonly EcsFilterInject<Inc<PressedKeysKeeperComponent>> keysKeeperFilter = null;
-        private readonly EcsPoolInject<InputKeyPressedEvent> pressKeyEventsPool = null;
-        private readonly EcsPoolInject<InputKeyUpEvent> pressKeyUpEventsPool = null;
         private readonly EcsPoolInject<InputKeyDownEvent> pressKeyDownEventsPool = null;
+        private readonly EcsPoolInject<InputKeyPressedEvent> pressKeyEventsPool = null;
         private readonly EcsFilterInject<Inc<InputKeyUpEvent>> pressKeyUpEventsFilter = null;
+        private readonly EcsPoolInject<InputKeyUpEvent> pressKeyUpEventsPool = null;
 
         private readonly EcsWorldInject world = null;
+
+        public void PostRun(IEcsSystems systems)
+        {
+            foreach (var keysKeeperId in keysKeeperFilter.Value)
+            {
+                ref var keysKeeperComponent = ref keyKeeperPool.Value.Get(keysKeeperId);
+                KeyboardHandle(ref keysKeeperComponent);
+            }
+        }
 
         public void Run(IEcsSystems systems)
         {
@@ -27,15 +35,6 @@ namespace Systems.Input
                 var pressedKeyEntity = world.Value.NewEntity();
                 ref var keysKeeperComponent = ref keyKeeperPool.Value.Add(pressedKeyEntity);
                 keysKeeperComponent.PressedKeyCodeEvents = new Dictionary<KeyCode, int>();
-            }
-        }
-
-        public void PostRun(IEcsSystems systems)
-        {
-            foreach (var keysKeeperId in keysKeeperFilter.Value)
-            {
-                ref var keysKeeperComponent = ref keyKeeperPool.Value.Get(keysKeeperId);
-                KeyboardHandle(ref keysKeeperComponent);
             }
         }
 
@@ -93,10 +92,7 @@ namespace Systems.Input
                 keysKeeper.PressedKeyCodeEvents.Remove(key);
             }
 
-            if (UnityEngine.Input.GetKeyUp(key))
-            {
-                pressKeyUpEventsPool.Value.Add(pressedKeyCodeEntity);
-            }
+            if (UnityEngine.Input.GetKeyUp(key)) pressKeyUpEventsPool.Value.Add(pressedKeyCodeEntity);
         }
     }
 }

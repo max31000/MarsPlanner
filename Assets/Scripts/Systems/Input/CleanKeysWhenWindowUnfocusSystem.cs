@@ -1,5 +1,4 @@
-﻿using Components;
-using Components.Input;
+﻿using Components.Input;
 using Helpers;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
@@ -30,10 +29,7 @@ namespace Systems.Input
             ref var windowStateComponent = ref windowStatePool.Value.Get(windowStateEntity);
 
             var isFocused = Application.isFocused;
-            if (windowStateComponent.IsFocused != isFocused)
-            {
-                CleanAllKeys();
-            }
+            if (windowStateComponent.IsFocused != isFocused) CleanAllKeys();
 
             windowStateComponent.IsFocused = isFocused;
         }
@@ -46,10 +42,7 @@ namespace Systems.Input
                 keysKeeperComponent.PressedKeyCodeEvents.Clear();
             }
 
-            foreach (var pressedKeyEvents in pressKeyEventFilter.Value)
-            {
-                pressKeyEventsPool.Value.Del(pressedKeyEvents);
-            }
+            foreach (var pressedKeyEvents in pressKeyEventFilter.Value) pressKeyEventsPool.Value.Del(pressedKeyEvents);
         }
     }
 }

@@ -13,7 +13,8 @@ namespace Helpers
             cameraComponent.MinHeight = cameraDefinition.minHeigth;
             cameraComponent.RotateSpeed = cameraDefinition.rotateSpeed;
             cameraComponent.Speed = cameraDefinition.speed;
-            cameraComponent.CameraConvergenceWithTargetValueSpeed = cameraDefinition.cameraConvergenceWithTargetValueSpeed;
+            cameraComponent.CameraConvergenceWithTargetValueSpeed =
+                cameraDefinition.cameraConvergenceWithTargetValueSpeed;
             cameraComponent.VerticalMoveStepFactor = cameraDefinition.verticalMoveStepFactor;
 
             cameraComponent.Camera = Object.Instantiate(cameraDefinition.mainCameraPrefab);
@@ -25,7 +26,8 @@ namespace Helpers
             cameraComponent.MaxZ = cameraDefinition.maxZ;
 
             // ReSharper disable once Unity.InefficientPropertyAccess
-            cameraComponent.Camera.transform.position = new Vector3(position.x, cameraComponent.Camera.transform.position.y, position.z);
+            cameraComponent.Camera.transform.position =
+                new Vector3(position.x, cameraComponent.Camera.transform.position.y, position.z);
         }
     }
 }

@@ -18,9 +18,9 @@ namespace Systems.Buildings
                 pressKeyDownEventsFilter.Value.GetEntitiesCount() == 0)
                 return;
 
-            foreach (var pressUpEvent in pressKeyDownEventsFilter.Value)
+            foreach (var pressDownEvent in pressKeyDownEventsFilter.Value)
             {
-                ref var pressComponent = ref pressKeyDownEventsFilter.Pools.Inc1.Get(pressUpEvent);
+                ref var pressComponent = ref pressKeyDownEventsFilter.Pools.Inc1.Get(pressDownEvent);
 
                 if (pressComponent.Code == KeyCode.R)
                     Rotate();
@@ -32,7 +32,7 @@ namespace Systems.Buildings
             foreach (var placeBuildEntity in placeBuildFilter.Value)
             {
                 ref var placeBuildComponent = ref placeBuildFilter.Pools.Inc1.Get(placeBuildEntity);
-                var rotateAngle = placeBuildComponent.Type == BuildingType.Passageway ? 45 : 90;
+                var rotateAngle = placeBuildComponent.Type is BuildingType.Passageway ? 45 : 90;
 
                 placeBuildComponent.Rotation = new Vector3(
                     placeBuildComponent.Rotation.x,

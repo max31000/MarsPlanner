@@ -4,6 +4,6 @@
     {
         None,
         KeyDown,
-        KeyUp,
+        KeyUp
     }
 }

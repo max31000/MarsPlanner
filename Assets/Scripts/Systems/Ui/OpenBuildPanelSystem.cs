@@ -1,5 +1,4 @@
-﻿using Components;
-using Components.Input;
+﻿using Components.Input;
 using Components.Ui;
 using Helpers;
 using Leopotam.EcsLite;
@@ -9,7 +8,9 @@ namespace Systems.Ui
 {
     public class OpenBuildPanelSystem : IEcsRunSystem
     {
-        private readonly EcsFilterInject<Inc<ButtonComponent, ButtonOnClickEvent, ButtonReadyToProcessComponent>> buttonEvents = null;
+        private readonly EcsFilterInject<Inc<ButtonComponent, ButtonOnClickEvent, ButtonReadyToProcessComponent>>
+            buttonEvents = null;
+
         private readonly EcsPoolInject<ButtonComponent> buttonPool = null;
         private readonly EcsFilterInject<Inc<InGameMenuUiComponent>> inGameMenuFilter = null;
         private readonly EcsPoolInject<InGameMenuUiComponent> inGameMenuPool = null;
@@ -27,7 +28,7 @@ namespace Systems.Ui
         {
             if (raycastEventFilter.Value.GetEntitiesCount() == 0)
                 return;
-            
+
             SetActive(false);
         }
 

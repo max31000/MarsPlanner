@@ -12,8 +12,8 @@ namespace Definitions
         public float minHeigth;
         public float cameraConvergenceWithTargetValueSpeed;
         public Camera mainCameraPrefab;
-        
-        public int minX; 
+
+        public int minX;
         public int maxX;
         public int minZ;
         public int maxZ;

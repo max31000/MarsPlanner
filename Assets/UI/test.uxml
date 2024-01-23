@@ -1,9 +1,9 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xmlns="UnityEngine.UIElements" editor-extension-mode="False">
-    <Style src="project://database/Assets/Styles/test.uss?fileID=7433441132597879392&amp;guid=5bcc60d71bcf13749b146f8433dd4e8e&amp;type=3#test" />
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Styles/test.uss?fileID=7433441132597879392&amp;guid=5bcc60d71bcf13749b146f8433dd4e8e&amp;type=3#test"/>
     <ui:VisualElement class="build-panel" style="flex-direction: row; position: absolute; bottom: 0; right: 0; left: 0">
-        <ui:Button class="build-button" />
-        <ui:Button class="build-button" />
-        <ui:Button class="build-button" />
-        <ui:Button class="build-button" />
+        <ui:Button class="build-button"/>
+        <ui:Button class="build-button"/>
+        <ui:Button class="build-button"/>
+        <ui:Button class="build-button"/>
     </ui:VisualElement>
 </ui:UXML>

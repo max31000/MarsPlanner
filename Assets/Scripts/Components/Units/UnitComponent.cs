@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.AI;
 
 namespace Components.Units
 {
@@ -6,7 +7,7 @@ namespace Components.Units
     {
         public GameObject GameObject;
 
-        public UnityEngine.AI.NavMeshAgent NavMeshAgent;
+        public NavMeshAgent NavMeshAgent;
 
         public Animator Animator;
     }

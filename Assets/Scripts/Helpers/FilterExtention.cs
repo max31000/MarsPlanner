@@ -8,9 +8,7 @@ namespace Helpers
         public static int Single(this EcsFilter filter)
         {
             if (filter.GetEntitiesCount() != 1)
-            {
                 throw new ArgumentException("The number of elements in the collection is not equal to one");
-            }
 
             using var enumerator = filter.GetEnumerator();
             enumerator.MoveNext();
@@ -20,10 +18,8 @@ namespace Helpers
         public static bool Contains(this EcsFilter filter, int entity)
         {
             foreach (var filterEntity in filter)
-            {
                 if (filterEntity == entity)
                     return true;
-            }
 
             return false;
         }

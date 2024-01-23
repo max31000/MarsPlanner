@@ -36,7 +36,8 @@ namespace Systems.Camera
             var downRay = new Ray(cameraComponent.Camera.transform.position, Vector3.down);
             var height = 0f;
 
-            if (Physics.Raycast(downRay, out var hit))
+            var layerMask = LayerMask.GetMask("Terrain");
+            if (Physics.Raycast(downRay, out var hit, 400, layerMask))
                 height = hit.point.y;
 
             cameraComponent.UnderCameraTerrainHeight = height;

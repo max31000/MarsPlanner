@@ -3,7 +3,6 @@ using Components.Input;
 using Helpers;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
-using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace Systems.Input

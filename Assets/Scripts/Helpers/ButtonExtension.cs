@@ -13,7 +13,7 @@ namespace Helpers
                     button.GetComponent<RectTransform>().rect.height));
         }
 
-        public static Bounds GetLayoutButtonBounds (this Button button)
+        public static Bounds GetLayoutButtonBounds(this Button button)
         {
             return new Bounds(new Vector3(button.transform.localPosition.x,
                     button.transform.localPosition.y, 0),

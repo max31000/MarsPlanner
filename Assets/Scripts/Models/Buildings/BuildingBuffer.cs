@@ -4,8 +4,8 @@ namespace Models.Buildings
 {
     public class BuildingBuffer
     {
-        public GameObject InstancedBuilding;
         public ColliderType ColliderType;
+        public GameObject InstancedBuilding;
         public Vector3 StartBoundSize;
     }
 }

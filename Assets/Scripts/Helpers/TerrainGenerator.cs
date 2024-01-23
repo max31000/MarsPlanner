@@ -10,9 +10,9 @@ namespace Helpers
         private readonly string filePath = "Assets/Heightmap.png";
         private readonly int height = 1025;
         private readonly float mountainHeight = 0.1f;
+
+        private readonly int perlinSeed = Random.Range(0, 10000);
         private readonly int width = 1025;
-        
-        private readonly int perlinSeed = Random.Range(0,10000);
 
         private float[,] heightMap = null!;
 
@@ -27,7 +27,7 @@ namespace Helpers
         {
             heightMap = new float[width, height];
 
-            float largeScaleFactor = 0.007f;
+            var largeScaleFactor = 0.007f;
             var largeScaleActivationHeight = 0.6f;
             var largeScaleActivationSpeed = 64f;
             var originalNoiseInfluenceFactor = 0.3f;
@@ -35,22 +35,28 @@ namespace Helpers
             for (var x = 0; x < width; x++)
             for (var y = 0; y < height; y++)
             {
-                float originalNoise = Mathf.PerlinNoise(x * 0.03f + perlinSeed, y * 0.03f + perlinSeed);
-                float largeScaleNoise = Mathf.PerlinNoise(x * largeScaleFactor + perlinSeed, y * largeScaleFactor + perlinSeed);
-                
-                largeScaleNoise = Mathf.Sqrt(largeScaleActivationSpeed) * 
-                    (largeScaleNoise - largeScaleActivationHeight) / 
-                    Mathf.Sqrt(1 + largeScaleActivationSpeed * Mathf.Pow(largeScaleNoise - largeScaleActivationHeight, 2)) 
-                    + 0.5f;
+                var originalNoise = Mathf.PerlinNoise(x * 0.03f + perlinSeed, y * 0.03f + perlinSeed);
+                var largeScaleNoise =
+                    Mathf.PerlinNoise(x * largeScaleFactor + perlinSeed, y * largeScaleFactor + perlinSeed);
+
+                largeScaleNoise = Mathf.Sqrt(largeScaleActivationSpeed) *
+                                  (largeScaleNoise - largeScaleActivationHeight) /
+                                  Mathf.Sqrt(1 + largeScaleActivationSpeed *
+                                      Mathf.Pow(largeScaleNoise - largeScaleActivationHeight, 2))
+                                  + 0.5f;
 
                 var formationSteps = 4;
                 for (var i = 1; i <= formationSteps; i++)
                     if (largeScaleNoise <= (float)i / formationSteps)
                         largeScaleNoise /= 1.2f;
 
-                float combinedNoise = Mathf.Max(largeScaleNoise * (1f - originalNoiseInfluenceFactor) + originalNoise * originalNoiseInfluenceFactor - originalNoiseInfluenceFactor / 3, 0);
+                var combinedNoise =
+                    Mathf.Max(
+                        largeScaleNoise * (1f - originalNoiseInfluenceFactor) +
+                        originalNoise * originalNoiseInfluenceFactor - originalNoiseInfluenceFactor / 3, 0);
 
-                combinedNoise *= (Math.Abs(x - (float)width / 2) + Math.Abs(y - (float)height / 2)) / (0.2f * (height + width));
+                combinedNoise *= (Math.Abs(x - (float)width / 2) + Math.Abs(y - (float)height / 2)) /
+                                 (0.2f * (height + width));
 
                 heightMap[x, y] = combinedNoise * mountainHeight;
             }
@@ -75,7 +81,7 @@ namespace Helpers
             File.WriteAllBytes(filePath, bytes);
         }
 
-        public float[,] SmoothArray(float[,] inputArray)
+        private float[,] SmoothArray(float[,] inputArray)
         {
             var arrayWidth = inputArray.GetLength(0);
             var arrayHeight = inputArray.GetLength(1);

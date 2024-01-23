@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Components;
-using Helpers;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
-using UnityEditor.AI;
 using UnityEngine;
 
 namespace Systems.Initialize
@@ -49,7 +46,6 @@ namespace Systems.Initialize
                     textureMap[x, y, 0] = 0.5f;
                     textureMap[x, y, 1] = 0.5f;
                 }
-
             }
 
             terrain.terrainData.SetAlphamaps(0, 0, textureMap);

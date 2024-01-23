@@ -22,12 +22,12 @@ namespace Systems.Initialize
         private readonly EcsPoolInject<BuildingsBufferComponent> buildingBufferPool = null;
         private readonly EcsPoolInject<CameraComponent> cameraPool = null;
         private readonly EcsPoolInject<CubeComponent> cubePool = null;
-        private readonly EcsPoolInject<RaycastTargetComponent> raycastCoordinatesPool = null;
-        private readonly EcsFilterInject<Inc<WorldTerrainKeeperComponent>> worldTerrainKeeperFilter = null;
 
 
         private readonly EcsCustomInject<GameDefinitions> definitions = default;
+        private readonly EcsPoolInject<RaycastTargetComponent> raycastCoordinatesPool = null;
         private readonly EcsWorldInject world = null;
+        private readonly EcsFilterInject<Inc<WorldTerrainKeeperComponent>> worldTerrainKeeperFilter = null;
 
         public void Init(IEcsSystems systems)
         {
@@ -91,7 +91,7 @@ namespace Systems.Initialize
                 .Select(x =>
                 {
                     var collider = x.Obj.GetComponentInChildren<Collider>();
-                    
+
                     x.Obj.layer = 6;
                     collider.gameObject.layer = 6;
 

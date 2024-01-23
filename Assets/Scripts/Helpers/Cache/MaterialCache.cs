@@ -9,19 +9,13 @@ namespace Helpers.Cache
 
         public static Material GetOutlineRed()
         {
-            if (outlineRed == null)
-            {
-                outlineRed = Resources.Load<Material>("Materials/OutlineRed");
-            }
+            if (outlineRed == null) outlineRed = Resources.Load<Material>("Materials/OutlineRed");
             return outlineRed;
         }
 
         public static Material GetOutlineGreen()
         {
-            if (outlineGreen == null)
-            {
-                outlineGreen = Resources.Load<Material>("Materials/OutlineGreen");
-            }
+            if (outlineGreen == null) outlineGreen = Resources.Load<Material>("Materials/OutlineGreen");
             return outlineGreen;
         }
     }

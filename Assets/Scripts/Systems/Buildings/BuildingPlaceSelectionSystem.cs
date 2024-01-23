@@ -28,10 +28,13 @@ namespace Systems.Buildings
                 var raycastCoordinatesEntity = raycastCoordinatesFilter.Value.Single();
                 ref var coordinatesComponent = ref coordinatesCollectorPool.Value.Get(raycastCoordinatesEntity);
 
+                const int gridMultiplier = 2;
                 buildComponent.Position = new Vector3(
-                    Mathf.Round(coordinatesComponent.TerrainRaycastIntersectCoordinates.x),
+                    Mathf.Round(coordinatesComponent.TerrainRaycastIntersectCoordinates.x / gridMultiplier) *
+                    gridMultiplier,
                     coordinatesComponent.TerrainRaycastIntersectCoordinates.y,
-                    Mathf.Round(coordinatesComponent.TerrainRaycastIntersectCoordinates.z)
+                    Mathf.Round(coordinatesComponent.TerrainRaycastIntersectCoordinates.z / gridMultiplier) *
+                    gridMultiplier
                 );
             }
         }

@@ -17,7 +17,9 @@ namespace Systems.Camera
                 var cameraTransform = cameraComponent.Camera.transform;
 
                 cameraTransform.SetPositionAndRotation(
-                    new Vector3(cameraComponent.Position.x, cameraComponent.Position.y + cameraComponent.UnderCameraTerrainHeight, cameraComponent.Position.z),
+                    new Vector3(cameraComponent.Position.x,
+                        cameraComponent.Position.y + cameraComponent.UnderCameraTerrainHeight,
+                        cameraComponent.Position.z),
                     cameraTransform.rotation);
 
                 CorrectCamera(ref cameraComponent);

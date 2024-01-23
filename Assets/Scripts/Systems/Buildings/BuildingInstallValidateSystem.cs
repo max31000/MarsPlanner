@@ -36,7 +36,8 @@ namespace Systems.Buildings
             return buildingBuffer.ColliderType switch
             {
                 ColliderType.Sphere => Physics.CheckSphere(position, buildingBuffer.StartBoundSize.x / 2, layerMask),
-                ColliderType.Box => Physics.CheckBox(position, buildingBuffer.StartBoundSize / 2, Quaternion.Euler(rotation), layerMask),
+                ColliderType.Box => Physics.CheckBox(position, buildingBuffer.StartBoundSize / 2,
+                    Quaternion.Euler(rotation), layerMask),
                 _ => throw new ArgumentOutOfRangeException()
             };
         }
