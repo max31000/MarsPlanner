@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Components;
+using Components.World;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 using UnityEngine;
@@ -13,8 +14,7 @@ namespace Systems.Initialize
         public void PreInit(IEcsSystems systems)
         {
             // отключаю генерацию на время разработки
-            /*NavMeshBuilder.ClearAllNavMeshes();
-            NavMeshBuilder.BuildNavMesh();
+            /*
             var generator = new HeightMapGenerator();
             var heightMap = generator.Generate();*/
 

@@ -2,8 +2,9 @@
 
 namespace Components.Buildings
 {
-    public struct ResetBufferEvent
+    public struct BuildingModeExitEvent
     {
-        public BuildingType Type;
+        public BuildingType InstalledType;
+        public bool IsNew;
     }
 }

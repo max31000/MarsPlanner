@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Components
+namespace Components.World
 {
     public struct WorldTerrainKeeperComponent
     {

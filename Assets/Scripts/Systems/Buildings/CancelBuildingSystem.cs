@@ -9,12 +9,11 @@ namespace Systems.Buildings
     public class CancelBuildingSystem : IEcsPostRunSystem
     {
         private readonly EcsFilterInject<Inc<PlaceBuildProcessingComponent>> buildPlaceFilter = null;
-        private readonly EcsPoolInject<PlaceBuildProcessingComponent> buildPlacePool = null;
 
         private readonly EcsPoolInject<InputKeyPressedEvent> pressKeyPressEventsPool = null;
         private readonly EcsFilterInject<Inc<InputKeyPressedEvent, InputKeyUpEvent>> pressKeyUpEventsFilter = null;
 
-        private readonly EcsPoolInject<ResetBufferEvent> resetBufferPool = null;
+        private readonly EcsPoolInject<BuildingModeExitEvent> buildingModeExitPool = null;
 
 
         public void PostRun(IEcsSystems systems)
@@ -26,14 +25,16 @@ namespace Systems.Buildings
             {
                 ref var pressComponent = ref pressKeyPressEventsPool.Value.Get(pressUpEntity);
 
-                if (pressComponent.Code is not (KeyCode.Escape or KeyCode.Mouse1)) continue;
+                if (pressComponent.Code is not (KeyCode.Escape or KeyCode.Mouse1))
+                    continue;
 
                 foreach (var buildPlaceEntity in buildPlaceFilter.Value)
                 {
-                    ref var buildPlaceComponent = ref buildPlacePool.Value.Get(buildPlaceEntity);
-                    ref var resetBufferEvent = ref resetBufferPool.NewEntity(out _);
-                    resetBufferEvent.Type = buildPlaceComponent.Type;
-                    buildPlacePool.Value.Del(buildPlaceEntity);
+                    ref var buildPlaceComponent = ref buildPlaceFilter.Pools.Inc1.Get(buildPlaceEntity);
+                    ref var buildingModeExitEvent = ref buildingModeExitPool.NewEntity(out _);
+                    buildingModeExitEvent.InstalledType = buildPlaceComponent.Type;
+                    buildingModeExitEvent.IsNew = true;
+                    buildPlaceFilter.Pools.Inc1.Del(buildPlaceEntity);
                 }
             }
         }

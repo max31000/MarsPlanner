@@ -1,6 +1,7 @@
 ﻿using System;
 using Components;
 using Components.Input;
+using Components.World;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 using UnityEngine;

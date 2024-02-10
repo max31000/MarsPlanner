@@ -1,5 +1,6 @@
 ﻿using Components;
 using Components.Input;
+using Components.World;
 using Helpers;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;

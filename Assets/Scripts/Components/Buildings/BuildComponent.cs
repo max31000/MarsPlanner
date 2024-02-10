@@ -1,4 +1,5 @@
-﻿using Models.Buildings;
+﻿using System;
+using Models.Buildings;
 using UnityEngine;
 
 namespace Components.Buildings
@@ -7,6 +8,10 @@ namespace Components.Buildings
     {
         public BuildingType Type;
 
+        public Guid BuildId { get; set; }
+
         public GameObject Object;
+
+        public BuildingGateInfo[] BuildingGateInfos;
     }
 }

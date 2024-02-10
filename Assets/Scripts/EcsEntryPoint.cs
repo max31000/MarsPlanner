@@ -1,7 +1,6 @@
 using Definitions;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
-using Leopotam.EcsLite.UnityEditor;
 using Systems;
 using Systems.Buildings;
 using Systems.Camera;
@@ -25,6 +24,7 @@ public class EcsEntryPoint : MonoBehaviour
         systems
             .Add(new InitGameLevelSystem())
             .Add(new TerrainInitializeSystem())
+            .Add(new NavigationGraphInitializeSystem())
             .Add(new CubeSystem())
             .Add(new InputSystem())
             .Add(new CameraSystem())
@@ -45,12 +45,13 @@ public class EcsEntryPoint : MonoBehaviour
             .Add(new ResetBuildBufferSystem())
             .Add(new BuildingMaterialSystem())
             .Add(new BuildingRotationSystem())
+            .Add(new BuildingExitEventDeleteSystem())
             .Add(new UnitGoSystem())
             .Inject(gameDefinitions)
 #if UNITY_EDITOR
             // не выносить префикс неймспейса в юзинг, поломается релизный билд
-            .Add(new EcsWorldDebugSystem())
-            .Add(new EcsSystemsDebugSystem())
+            .Add(new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem())
+            .Add(new Leopotam.EcsLite.UnityEditor.EcsSystemsDebugSystem())
 #endif
             .Inject()
             .Init();

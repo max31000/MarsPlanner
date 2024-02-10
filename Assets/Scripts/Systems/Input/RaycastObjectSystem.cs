@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Components;
 using Components.Input;
+using Components.World;
 using Definitions;
 using Helpers;
 using Leopotam.EcsLite;
@@ -69,6 +70,8 @@ namespace Systems.Input
             castObjectComponent.GameObject = hit.collider.gameObject;
             castObjectComponent.GameObjectName = castObjectComponent.GameObject.name;
             castObjectComponent.RaySourceKeyCode = sourceKeyCode;
+            castObjectComponent.RaycastPoint = hit.point;
+            Debug.Log(hit.point);
         }
     }
 }

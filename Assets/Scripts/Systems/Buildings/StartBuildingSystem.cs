@@ -26,7 +26,7 @@ namespace Systems.Buildings
 
         private readonly EcsFilterInject<Inc<RaycastTargetComponent>> raycastTargetFilter = null;
 
-        private readonly EcsPoolInject<ResetBufferEvent> resetBufferPool = null;
+        private readonly EcsPoolInject<BuildingModeExitEvent> resetBufferPool = null;
 
 
         public void Run(IEcsSystems systems)
@@ -82,7 +82,7 @@ namespace Systems.Buildings
             if (buildType != buildPlaceComponent.Type && !newBuilding)
             {
                 ref var resetBufferEvent = ref resetBufferPool.NewEntity(out _);
-                resetBufferEvent.Type = buildPlaceComponent.Type;
+                resetBufferEvent.InstalledType = buildPlaceComponent.Type;
             }
 
             buildPlaceComponent.Bounds =

@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.github-glitchenzo.nugetforunity": {
+      "version": "https://github.com/GlitchEnzo/NuGetForUnity.git?path=/src/NuGetForUnity",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "7388d28922b2144497f639630fd8b8b7a3c1ee6d"
+    },
     "com.leopotam.ecslite": {
       "version": "https://github.com/Leopotam/ecslite.git",
       "depth": 0,
@@ -20,15 +27,6 @@
       "source": "git",
       "dependencies": {},
       "hash": "480dbdfd0d73591f93ca010ea1a52bfa8e4cc06e"
-    },
-    "com.unity.ai.navigation": {
-      "version": "1.1.5",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.modules.ai": "1.0.0"
-      },
-      "url": "https://packages.unity.com"
     },
     "com.unity.collab-proxy": {
       "version": "2.2.0",

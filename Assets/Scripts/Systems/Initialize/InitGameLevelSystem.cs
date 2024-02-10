@@ -5,6 +5,7 @@ using System.Linq;
 using Components;
 using Components.Buildings;
 using Components.Input;
+using Components.World;
 using Definitions;
 using Definitions.Constants;
 using Helpers;
@@ -12,6 +13,7 @@ using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 using Models.Buildings;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Object = UnityEngine.Object;
 
 namespace Systems.Initialize
@@ -96,13 +98,18 @@ namespace Systems.Initialize
                     collider.gameObject.layer = 6;
 
                     var colliderType = collider is SphereCollider ? ColliderType.Sphere : ColliderType.Box;
-                    var startBounds = collider.bounds.size;
+                    var radius = 0f;
+                    if (colliderType == ColliderType.Sphere)
+                    {
+                        radius = (collider as SphereCollider)!.radius * collider.gameObject.transform.lossyScale.y;
+                    }
 
                     return (x.Tag, Buffer: new BuildingBuffer
                     {
                         InstancedBuilding = x.Obj,
                         ColliderType = colliderType,
-                        StartBoundSize = startBounds
+                        StartBoundSize = collider.bounds.size,
+                        SphereColliderRadius = radius
                     });
                 })
                 .ToDictionary(x => x.Tag, x => x.Buffer);

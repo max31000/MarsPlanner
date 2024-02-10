@@ -7,6 +7,7 @@
 
         // ReSharper disable once InconsistentNaming
         GreenHouse_small,
-        Passageway
+        Passageway,
+        Bedroom
     }
 }

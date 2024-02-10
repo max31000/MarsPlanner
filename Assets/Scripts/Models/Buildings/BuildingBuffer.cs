@@ -7,5 +7,6 @@ namespace Models.Buildings
         public ColliderType ColliderType;
         public GameObject InstancedBuilding;
         public Vector3 StartBoundSize;
+        public float SphereColliderRadius;
     }
 }
