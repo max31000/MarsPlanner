@@ -6,7 +6,7 @@ namespace CustomMonoBehaviour
     [Serializable]
     public class LocalNavigationGraph
     {
-        public List<UnityNavigationNode> Nodes = new List<UnityNavigationNode>();
-        public List<UnityNavigationEdge> Edges = new List<UnityNavigationEdge>();
+        public List<UnityNavigationNode> Nodes = new();
+        public List<UnityNavigationEdge> Edges = new();
     }
 }

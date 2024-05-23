@@ -24,7 +24,7 @@ public class EcsEntryPoint : MonoBehaviour
         systems
             .Add(new InitGameLevelSystem())
             .Add(new TerrainInitializeSystem())
-            .Add(new NavigationGraphInitializeSystem())
+            .Add(new NavigationInitializeSystem())
             .Add(new CubeSystem())
             .Add(new InputSystem())
             .Add(new CameraSystem())

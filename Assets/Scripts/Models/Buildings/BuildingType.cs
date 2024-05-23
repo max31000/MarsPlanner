@@ -3,7 +3,7 @@
     public enum BuildingType
     {
         Gateway,
-        ControlCentre,
+        Lab,
 
         // ReSharper disable once InconsistentNaming
         GreenHouse_small,

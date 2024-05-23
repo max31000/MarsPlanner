@@ -1,6 +1,8 @@
 ﻿using Components.Buildings;
 using Components.Input;
+using Components.Navigation;
 using Components.Units;
+using Helpers;
 using Helpers.Cache;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
@@ -21,6 +23,8 @@ namespace Systems.Unit
         private readonly EcsFilterInject<Inc<RaycastObjectEvent>> raycastObjectFilter = null;
 
         private readonly EcsFilterInject<Inc<BuildingModeExitEvent>> buildingModeExitEventFilter = null;
+        
+        private readonly EcsFilterInject<Inc<GlobalNavigationDataComponent>> navigationDataFilter = null;
 
         public void Init(IEcsSystems systems)
         {
@@ -45,6 +49,18 @@ namespace Systems.Unit
                 if (raycastComponent.RaySourceKeyCode != KeyCode.Mouse1)
                 {
                     continue;
+                }
+                
+                var navigationData = navigationDataFilter.Pools.Inc1.Get(navigationDataFilter.Value.Single());
+                var path = navigationData.NavigationSystem.FindPathTo(new Vector3(0, 0, 0), raycastComponent.RaycastPoint);
+                if (path == null)
+                {
+                    return;
+                }
+
+                foreach (var point in path)
+                {
+                    Debug.DrawLine(point.Position, point.Position + Vector3.up * 2, Color.white, 10000);
                 }
 
                 foreach (var unitEntity in unitFilter.Value)

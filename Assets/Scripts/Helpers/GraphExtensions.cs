@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using CustomMonoBehaviour;
+using Models.Navigation;
 using QuikGraph;
+using UnityEngine;
 
 namespace Helpers
 {
@@ -35,6 +38,49 @@ namespace Helpers
                             graph.RemoveEdge(edge);
                         graph.RemoveVertex(vertex);
                     }
+        }
+        
+        public static UndirectedGraph<NavigationNode, Edge<NavigationNode>> ToUndirectedGraph(
+            this LocalNavigationGraph localNavigationGraph, Vector3 transformPosition, float eulerAnglesY)
+        {
+            var graph = new UndirectedGraph<NavigationNode, Edge<NavigationNode>>();
+            var nodeByIndex = new Dictionary<int, NavigationNode>();
+            for (var i = 0; i < localNavigationGraph.Nodes.Count; i++)
+            {
+                var node = localNavigationGraph.Nodes[i];
+                var position = node.position + transformPosition;
+                var rotation = Quaternion.Euler(0, eulerAnglesY, 0);
+                var navigationNode = node.ToNavigationNode();
+                navigationNode.Position = rotation * (position - transformPosition) + transformPosition;
+                nodeByIndex[i] = navigationNode;
+                graph.AddVertex(navigationNode);
+            }
+
+            foreach (var edge in localNavigationGraph.Edges)
+            {
+                var startNode = nodeByIndex[edge.startIndex];
+                var endNode = nodeByIndex[edge.endIndex];
+                graph.AddEdge(new Edge<NavigationNode>(startNode, endNode));
+            }
+
+            return graph;
+        }
+        
+        public static NavigationNode ToNavigationNode(this UnityNavigationNode node)
+        {
+            return new NavigationNode(node.position)
+            {
+                Type = node.GetNodeType()
+            };
+        }
+
+        public static NodeType GetNodeType(this UnityNavigationNode node)
+        {
+            if (node.isBuildConnectionNode)
+                return NodeType.BuildConnectionNode;
+            if (node.isOutNode)
+                return NodeType.BuildOutNode;
+            return NodeType.BuildInsideNode;
         }
 
         private static void Dfs<TVertex, TEdge>(UndirectedGraph<TVertex, TEdge> graph, TVertex startVertex,
